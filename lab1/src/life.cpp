@@ -49,6 +49,7 @@ void draw_grid(Grid<char> const& grid) {
 char update_position(Grid<char> const& grid, int pos_row, int pos_col) {
 	int alive_cells = 0;
 
+	// Check for alive cells around position.
 	for (int row = pos_row - 1; row < (pos_row + 2); ++row) {
 		for (int col = pos_col - 1; col < (pos_col + 2); ++col) {
 			if (grid.inBounds(row, col) && grid.get(row, col) == 'X' &&
@@ -80,7 +81,9 @@ Grid<char> tick(Grid<char> const& grid) {
 }
 
 void animate(Grid<char>& game_of_life) {
-	while (true) {
+	int const generations = 50;
+
+	for (int i = 0; i < generations; i++) {
 		pause(100);
 		clearConsole();
 		game_of_life = tick(game_of_life);
