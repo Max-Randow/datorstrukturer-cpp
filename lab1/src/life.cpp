@@ -1,3 +1,12 @@
+/*
+ * Authors: wilmi895, maxra518
+ * Lab1: Game of Life
+ * Description:
+ * Simulates and animates conways game of life.
+ * Provides interface for animating and ticking through
+ * the generations.
+ */
+
 #include <array>
 #include <cstdlib>
 #include <fstream>
@@ -10,6 +19,9 @@
 
 using namespace std;
 
+/*
+ * Initializes a grid object with the initial state from a file.
+ */
 Grid<char> init_game_of_life(string const& file_name) noexcept {
 	ifstream rfile(file_name, ios_base::in);
 
@@ -37,6 +49,9 @@ Grid<char> init_game_of_life(string const& file_name) noexcept {
 	return game_of_life;
 }
 
+/*
+ * Draws out a grid object.
+ */
 void draw_grid(Grid<char> const& grid) {
 	for (int row = 0; row < grid.numRows(); ++row) {
 		for (int col = 0; col < grid.numCols(); ++col) {
@@ -46,6 +61,9 @@ void draw_grid(Grid<char> const& grid) {
 	}
 }
 
+/*
+ * Returns updated position in the grid using rules from game of life
+ */
 char update_position(Grid<char> const& grid, int pos_row, int pos_col) {
 	int alive_cells = 0;
 
@@ -68,9 +86,13 @@ char update_position(Grid<char> const& grid, int pos_row, int pos_col) {
 	}
 }
 
+/*
+ * Generates the next generation of game of life.
+ */
 Grid<char> tick(Grid<char> const& grid) {
 	auto next_grid = grid;
 
+	// Iterate through the entire grid and update each position.
 	for (int row = 0; row < next_grid.numRows(); ++row) {
 		for (int col = 0; col < next_grid.numCols(); ++col) {
 			next_grid.set(row, col, update_position(grid, row, col));
@@ -80,17 +102,24 @@ Grid<char> tick(Grid<char> const& grid) {
 	return next_grid;
 }
 
+/*
+ * Animates game of life for 5 seconds.
+ */
 void animate(Grid<char>& game_of_life) {
 	int const generations = 50;
 
 	for (int i = 0; i < generations; i++) {
 		pause(100);
 		clearConsole();
+		// Update with next generation of game of life.
 		game_of_life = tick(game_of_life);
 		draw_grid(game_of_life);
 	}
 }
 
+/*
+ * Loop which lets user input options to game of life.
+ */
 void game_loop(string const& file_name) {
 	Grid<char> game_of_life = init_game_of_life(file_name);
 	bool running			= true;
@@ -102,15 +131,18 @@ void game_loop(string const& file_name) {
 		cin >> choice;
 
 		switch (choice) {
+		// Animates game of life for short period.
 		case 'a': {
 			animate(game_of_life);
 			break;
 		}
+		// Ticks one generation in game of life.
 		case 't': {
 			game_of_life = tick(game_of_life);
 			draw_grid(game_of_life);
 			break;
 		}
+		// Quits game of life interface.
 		case 'q': {
 			running = false;
 			break;
@@ -121,9 +153,6 @@ void game_loop(string const& file_name) {
 }
 
 int main() {
-	// ios_base::sync_with_stdio(false);
-	// cin.tie(NULL);
-
 	cout << "Welcome to the TDDD86 Game of Life,"
 			"\na simulation of the lifecycle of a bacteria colony."
 			"\nCells (X) live and die by the following rules:"
