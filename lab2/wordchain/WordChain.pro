@@ -19,7 +19,7 @@ QMAKE_CXXFLAGS += -Werror=implicit-fallthrough -Werror=return-type -Werror=narro
 
 QMAKE_CXXFLAGS_DEBUG += -Og -g -ggdb -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables
 #QMAKE_CXXFLAGS_DEBUG += -fsanitize=address -fsanitize=undefined
-QMAKE_CXXFLAGS_RELEASE += -D NDEBUG -O3 -march=native -flto
+QMAKE_CXXFLAGS_RELEASE += -D NDEBUG -O3 -march=native -flto -s
 
 QMAKE_LFLAGS += -m64
 #QMAKE_LFLAGS_DEBUG += -fsanitize=address -fsanitize=undefined

@@ -1,3 +1,11 @@
+/*
+ * Author: wilmi895, maxra518
+ * Lab 2a: Word Chain
+ * Description:
+ * Functions which transforms a english word into another
+ * using one letter difference words. Also provides a dictionary helper
+ * function for a english dictionary.
+ */
 #include <fstream>
 #include <iostream>
 #include <queue>
