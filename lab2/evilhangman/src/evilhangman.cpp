@@ -16,7 +16,7 @@ const string ALPHABET = "abcdefghijklmnopqrstuvwxyz";
  * in the dictionary.
  */
 pair<vector<string>, unordered_set<size_t>> init_dictionary(
-	string const& file_name) {
+	string const& file_name) noexcept {
 	ifstream rfile(file_name);
 	vector<string> dictionary;
 	unordered_set<size_t> word_lengths;
@@ -29,15 +29,15 @@ pair<vector<string>, unordered_set<size_t>> init_dictionary(
 	return make_pair(dictionary, word_lengths);
 }
 
-bool inAlphabet(char letter) {
-	// ALPHABET.find_first_of(letter);
-	for (char l : ALPHABET) {
-		if (l == letter) {
-			return true;
-		}
-	}
-	return false;
+bool inAlphabet(char const letter) noexcept {
+	return binary_search(ALPHABET.cbegin(), ALPHABET.cend(), letter);
 }
+
+template<template<typename...> class Container, typename T>
+bool valueExists(T const& value, Container<T> const& set) {
+	return set.find(value) != set.cend();
+}
+
 
 struct GameSettings {
 	bool show_words_left;
@@ -45,7 +45,7 @@ struct GameSettings {
 	int guess_count;
 };
 
-bool AskUserYesNo(string const& message) {
+bool AskUserYesNo(string const& message) noexcept {
 	string choice;
 
 	while (true) {
@@ -67,7 +67,7 @@ GameSettings setup_game(unordered_set<size_t> const& word_lengths) {
 		cout << "Choose the word size: ";
 		cin >> wanted_word_len;
 
-		if (word_lengths.find(wanted_word_len) != word_lengths.end()) {
+		if (valueExists(wanted_word_len, word_lengths)) {
 			break;
 		}
 		cout << "No words exist with length " << wanted_word_len << '\n';
@@ -94,10 +94,10 @@ GameSettings setup_game(unordered_set<size_t> const& word_lengths) {
 void game_loop(vector<string> const& dictionary,
 			   unordered_set<size_t> const& word_lengths) {
 	while (true) {
-		set<char> guessed_letters;
+		unordered_set<char> guessed_letters;
 		GameSettings settings = setup_game(word_lengths);
+		int guesses_left	  = settings.guess_count;
 		string current_word_version(settings.word_length, '-');
-		int guesses_left = settings.guess_count;
 
 		vector<string> equal_len_words;
 		copy_if(dictionary.cbegin(), dictionary.cend(),
@@ -106,50 +106,65 @@ void game_loop(vector<string> const& dictionary,
 					return word.length() == settings.word_length;
 				});
 
-		cout << "Guesses left: " << guesses_left << '\n';
-		cout << "Letters guessed: ";
-		for (char letter : guessed_letters) {
-			cout << letter << ' ';
-		}
-		cout << endl;
-		cout << current_word_version << '\n';
-		// TODO: fix write out words left after guess :)
-
-		string guess;
+		// Guess loop.
 		while (true) {
-			cout << "Enter guess: ";
-			cin >> guess;
+			cout << "Guesses left: " << guesses_left << '\n';
+			cout << "Letters guessed: ";
+			for (char const letter : guessed_letters) {
+				cout << letter << ' ';
+			}
+			cout << '\n';
+			cout << current_word_version << '\n';
+			// TODO: fix write out words left after guess :)
 
-			if (!inAlphabet(guess[0])) {
-				cout << "Not a valid character.\n";
+
+			char guess = ' ';
+			while (true) {
+				cout << "Enter guess: ";
+				string buffer;
+				cin >> buffer;
+
+				if (buffer.length() > 1) {
+					cout << "Guess a single character.\n";
+					continue;
+				}
+				guess = buffer[0];
+
+				if (!inAlphabet(guess)) {
+					cout << "Character not in alphabet.\n";
+				} else if (valueExists(guess, guessed_letters)) {
+					cout << "Letter already guessed, guess another.\n";
+				} else {
+					break;
+				}
 			}
 
-			if (guessed_letters.find(guess[0]) != guessed_letters.end()) {
-				break;
-			} else {
-				cout << "Letter already guessed, guess another letter.\n";
+			unordered_map<string, vector<string>> word_families;
+
+			// TODO: partition words
+			for (string const& word : dictionary) {
+				string family_key;
+
+				for (size_t i = 0; i < word.length(); ++i) {
+					if (word[i] == guess) {
+						family_key += to_string(i);
+					}
+				}
+				word_families[family_key].push_back(word);
 			}
 		}
 
-		// TODO: partition words
-
-
+		// Utökning: Vikt ordklasser med hur många unika gissningar de har.
+		//  Har vissa ord multipla bokstäver kommer de krävas färre gissningar
 		if (!AskUserYesNo("Play again?")) {
 			break;
 		}
 	}
-
-	"-E--"
-		// Maps string with indicies of equal letters to word families.
-		unordered_map<string, vector<string>>
-			word_families;
-	// The same but the size of each family.
-	unordered_map<string, size_t> word_familiy_sizes;
 }
 
 int main() {
-	auto init_pair					= init_dictionary("dictionary.txt");
-	vector<string> const dictionary = move(init_pair.first);
+	auto init_pair							 = init_dictionary("di.txt");
+	vector<string> const dictionary			 = move(init_pair.first);
 	unordered_set<size_t> const word_lengths = move(init_pair.second);
 
 	cout << "Welcome to Hangman.\n";
