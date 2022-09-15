@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-CONFIG += console
+CONFIG += console c++11
 CONFIG += no_include_pwd
 CONFIG -= app_bundle
 CONFIG -= qt
