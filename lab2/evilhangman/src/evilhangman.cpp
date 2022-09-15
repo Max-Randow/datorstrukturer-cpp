@@ -91,34 +91,31 @@ GameSettings setup_game(unordered_set<size_t> const& word_lengths) {
 	return {show_words_left, wanted_word_len, guess_count};
 }
 
-pair<vector<string>, string> gen_largest_word_family(vector<string> const& dictionary){
-    unordered_map<string,vector<string>> word_families;          
-    size_t largest_family_size;
-    string largest_family_key;
+pair<vector<string>, string> gen_largest_word_family(
+	vector<string> const& dictionary,
+	char const guess) {
+	unordered_map<string, vector<string>> word_families;
+	size_t largest_family_size;
+	string largest_family_key;
 
-    for (string const& word : dictionary) {
+	for (string const& word : dictionary) {
 		string family_key;
 		for (size_t i = 0; i < word.length(); ++i) {
 			if (word[i] == guess) {
-				family_key += guess;					
-            } else {
-                family_key += "-";
-            }
-			
-        }
+				family_key += guess;
+			} else {
+				family_key += "-";
+			}
+		}
 		word_families[family_key].push_back(word);
-        // Save largest family
-        if (word_families[family_key].size() > largest_family_size){
-           largest_family_size = word_families[family_key].size();
-           largest_family_key = family_key;
-        }
-        
+		// Save largest family
+		if (word_families[family_key].size() > largest_family_size) {
+			largest_family_size = word_families[family_key].size();
+			largest_family_key	= family_key;
+		}
 	}
-    return make_pair(word_families[largest_family_key], largest_family_key);
+	return make_pair(word_families[largest_family_key], largest_family_key);
 }
-
-
-
 
 
 void game_loop(vector<string> const& dictionary,
@@ -136,7 +133,7 @@ void game_loop(vector<string> const& dictionary,
 					return word.length() == settings.word_length;
 				});
 
-        vector<string> current_word_family = dictionary;
+		vector<string> current_word_family = dictionary;
 		// Guess loop.
 		while (true) {
 			cout << "Guesses left: " << guesses_left << '\n';
@@ -169,25 +166,26 @@ void game_loop(vector<string> const& dictionary,
 					break;
 				}
 			}
-            auto tmp_family = gen_largest_word_family(current_word_family);
-            current_word_family = tmp_family.first;
-            current_word_version = tmp_family.second; 
-            bool correct_guess = false;
-            for(string const& letter : current_word_version){
-                if(letter == guess) {
-                    correct_guess = true;
-                    break;
-                }
-            }
-            if (!correct_guess) {
-                guesses_left--;
-            }
+			auto tmp_family =
+				gen_largest_word_family(current_word_family, guess);
+			current_word_family	 = move(tmp_family.first);
+			current_word_version = move(tmp_family.second);
+
+			bool correct_guess = any_of(current_word_version.cbegin(),
+										current_word_version.cend(), guess);
+
+			if (!correct_guess) {
+				guesses_left--;
+			}
 
 
-		// Utökning: Vikt ordklasser med hur många unika gissningar de har.
-		//  Har vissa ord multipla bokstäver kommer de krävas färre gissningar
-		if (!AskUserYesNo("Play again?")) {
-			break;
+			// Utökning: Vikt ordklasser med hur många unika gissningar de
+			// har.
+			//  Har vissa ord multipla bokstäver kommer de krävas färre
+			//  gissningar
+			if (!AskUserYesNo("Play again?")) {
+				break;
+			}
 		}
 	}
 }
