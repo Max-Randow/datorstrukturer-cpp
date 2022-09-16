@@ -8,6 +8,8 @@
 #include <vector>
 using namespace std;
 
+
+// TODO: convert to set.
 const string ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 
 /*
@@ -114,38 +116,37 @@ WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
 									   char const guess,
 									   unsigned int guesses_left) {
 	unordered_map<string, vector<string>> word_families;
-	string largest_family_key;
-	unsigned int largest_family_size = 0;
-	size_t const word_length		 = dictionary[0].length();
+	unordered_map<string, unordered_set<char>> letters_in_family;
+	string chosen_family_key;
+	unsigned int most_unique_count = 0;
+	size_t const word_length	   = dictionary[0].length();
 
 	for (string const& word : dictionary) {
 		string family_key;
+		unordered_set<char> word_letters;
 		// Construct family key for word using letters which match guess.
 		for (unsigned int i = 0; i < word_length; ++i) {
-			if (word[i] == guess) {
+			char const letter = word[i];
+			word_letters.insert(letter);
+
+			if (letter == guess) {
 				family_key += guess;
 			} else {
 				family_key += '-';
 			}
 		}
-		vector<string>& current_family = word_families[family_key];
-		current_family.push_back(word);
-		// Save largest family
-		if (current_family.size() > largest_family_size) {
-			largest_family_size =
-				static_cast<unsigned int>(current_family.size());
-			largest_family_key = move(family_key);
-		}
+		word_families[family_key].push_back(word);
+		letters_in_family[family_key].insert(word_letters.cbegin(),
+											 word_letters.cend());
 	}
 
-	string empty_guess(word_length, '-');
+	string empty_word(word_length, '-');
 	if (guesses_left == 1 &&
-		word_families.find(empty_guess) != word_families.cend()) {
-		return WordFamliyData {word_families[empty_guess], empty_guess};
+		word_families.find(empty_word) != word_families.cend()) {
+		return WordFamliyData {word_families[empty_word], empty_word};
 	}
 
-	return WordFamliyData {word_families[largest_family_key],
-						   largest_family_key};
+	return WordFamliyData {word_families[chosen_family_key], chosen_family_key};
 }
 
 /*
