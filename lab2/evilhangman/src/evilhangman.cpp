@@ -107,9 +107,12 @@ struct WordFamliyData {
 
 /*
  * Generates word families and picks out the largest family.
+ * If there is one guess left pick the word family which the user has an
+ * incorrect guess.
  */
 WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
-									   char const guess) {
+									   char const guess,
+									   unsigned int guesses_left) {
 	unordered_map<string, vector<string>> word_families;
 	string largest_family_key;
 	unsigned int largest_family_size = 0;
@@ -127,12 +130,18 @@ WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
 		}
 		vector<string>& current_family = word_families[family_key];
 		current_family.push_back(word);
-		// Save largest family.
+		// Save largest family
 		if (current_family.size() > largest_family_size) {
 			largest_family_size =
 				static_cast<unsigned int>(current_family.size());
 			largest_family_key = move(family_key);
 		}
+	}
+
+	string empty_guess(word_length, '-');
+	if (guesses_left == 1 &&
+		word_families.find(empty_guess) != word_families.cend()) {
+		return WordFamliyData {word_families[empty_guess], empty_guess};
 	}
 
 	return WordFamliyData {word_families[largest_family_key],
@@ -257,8 +266,8 @@ void game_loop(vector<string> const& dictionary,
 			char const guess = get_next_guess(guessed_letters);
 			guessed_letters.insert(guess);
 
-			WordFamliyData family_data =
-				gen_largest_word_family(current_word_family, guess);
+			WordFamliyData family_data = gen_largest_word_family(
+				current_word_family, guess, guesses_left);
 			current_word_family = move(family_data.word_family);
 
 			WordData updated_word_data =
