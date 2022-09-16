@@ -10,7 +10,6 @@ using namespace std;
 
 const string ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 
-
 /*
  * Initializes the english dictionary and a set of available word lengths
  * in the dictionary.
@@ -29,15 +28,16 @@ pair<vector<string>, unordered_set<unsigned int>> init_dictionary(
 	return make_pair(dictionary, word_lengths);
 }
 
+/*
+ * Checks if letter is alphabetic.
+ */
 bool inAlphabet(char const letter) noexcept {
 	return binary_search(ALPHABET.cbegin(), ALPHABET.cend(), letter);
 }
 
-template<template<typename...> class Container, typename T>
-bool value_exists(T const& value, Container<T> const& container) {
-	return container.find(value) != container.cend();
-}
-
+/*
+ * Asks users yes or no question.
+ */
 bool ask_user_yes_no(string const& message) noexcept {
 	string choice;
 
@@ -54,27 +54,33 @@ bool ask_user_yes_no(string const& message) noexcept {
 	}
 }
 
+/*
+ * Holds game settings for initializing game.
+ */
 struct GameSettings {
 	bool const show_words_left;
 	unsigned int const word_length;
 	unsigned int const guess_count;
 };
 
+/*
+ * Sets up game settings and retrieves them from the user.
+ */
 GameSettings setup_game(unordered_set<unsigned int> const& word_lengths) {
 	unsigned int wanted_word_len = 0;
-
+	// Get the word length from user.
 	while (true) {
-		cout << "Choose the word size: ";
+		cout << "Choose the word length: ";
 		cin >> wanted_word_len;
 
-		if (value_exists(wanted_word_len, word_lengths)) {
+		if (word_lengths.find(wanted_word_len) != word_lengths.cend()) {
 			break;
 		}
 		cout << "No words exist with length " << wanted_word_len << '\n';
 	}
 
 	unsigned int guess_count = 0;
-
+	// Get number of guesses from user.
 	while (true) {
 		cout << "Choose amount of guesses: ";
 		cin >> guess_count;
@@ -91,20 +97,28 @@ GameSettings setup_game(unordered_set<unsigned int> const& word_lengths) {
 	return {show_words_left, wanted_word_len, guess_count};
 }
 
+/*
+ * Holds data about a word family.
+ */
 struct WordFamliyData {
 	vector<string> word_family;
 	string family_key;
 };
 
+/*
+ * Generates word families and picks out the largest family.
+ */
 WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
 									   char const guess) {
 	unordered_map<string, vector<string>> word_families;
 	string largest_family_key;
 	unsigned int largest_family_size = 0;
+	size_t const word_length		 = dictionary[0].length();
 
 	for (string const& word : dictionary) {
 		string family_key;
-		for (unsigned int i = 0; i < word.length(); ++i) {
+		// Construct family key for word using letters which match guess.
+		for (unsigned int i = 0; i < word_length; ++i) {
 			if (word[i] == guess) {
 				family_key += guess;
 			} else {
@@ -113,16 +127,22 @@ WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
 		}
 		vector<string>& current_family = word_families[family_key];
 		current_family.push_back(word);
-		// Save largest family
+		// Save largest family.
 		if (current_family.size() > largest_family_size) {
 			largest_family_size =
 				static_cast<unsigned int>(current_family.size());
 			largest_family_key = move(family_key);
 		}
 	}
-	return {word_families[largest_family_key], largest_family_key};
+
+	return WordFamliyData {word_families[largest_family_key],
+						   largest_family_key};
 }
 
+/*
+ * Asks the user for the next guess and checks if it is valid
+ * before returning it.
+ */
 char get_next_guess(set<char> const& guessed_letters) {
 	char guess = ' ';
 	while (true) {
@@ -130,15 +150,17 @@ char get_next_guess(set<char> const& guessed_letters) {
 		string buffer;
 		cin >> buffer;
 
+		// Check if user entered only one character.
 		if (buffer.length() > 1) {
 			cout << "Guess a single character.\n";
 			continue;
 		}
 		guess = buffer[0];
 
+		// Check if guess is a valid character.
 		if (!inAlphabet(guess)) {
 			cout << "Character not in alphabet.\n";
-		} else if (value_exists(guess, guessed_letters)) {
+		} else if (guessed_letters.find(guess) != guessed_letters.cend()) {
 			cout << "Letter already guessed, guess another.\n";
 		} else {
 			return guess;
@@ -146,7 +168,10 @@ char get_next_guess(set<char> const& guessed_letters) {
 	}
 }
 
-
+/*
+ * Contains the the current word guessed
+ * and the amount of correctly guessed letters.
+ */
 struct WordData {
 	string current_word;
 	unsigned int const correct_letter_count;
@@ -163,6 +188,7 @@ WordData update_current_word(string const& current_word,
 	string updated_word(word_length, '-');
 	unsigned int correct_letter_count = 0;
 
+	// Merge letters in both words and count them.
 	for (size_t i = 0; i < word_length; ++i) {
 		if (current_word[i] != '-') {
 			updated_word[i] = current_word[i];
@@ -175,7 +201,9 @@ WordData update_current_word(string const& current_word,
 	return {updated_word, correct_letter_count};
 }
 
-
+/*
+ * The main game loop of hangman.
+ */
 void game_loop(vector<string> const& dictionary,
 			   unordered_set<unsigned int> const& word_lengths) {
 	// Game loop.
@@ -249,8 +277,8 @@ void game_loop(vector<string> const& dictionary,
 	} while (ask_user_yes_no("Play again?"));
 }
 
-
 int main() {
+	// Initialize dictionary and set of available word lengths.
 	auto init_pair								   = init_dictionary("di.txt");
 	vector<string> const dictionary				   = move(init_pair.first);
 	unordered_set<unsigned int> const word_lengths = move(init_pair.second);
@@ -259,7 +287,7 @@ int main() {
 
 	game_loop(dictionary, word_lengths);
 
-	// Utökning: Vikt ordklasser med hur många unika gissningar de
+	// Utökning: Vikt ordklasser med hur många unika bokstäver de
 	// har.
 	//  Har vissa ord multipla bokstäver kommer de krävas färre
 	//  gissningar
