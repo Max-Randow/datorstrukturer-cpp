@@ -128,7 +128,7 @@ WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
 		for (unsigned int i = 0; i < word_length; ++i) {
 			char const letter = word[i];
 			word_letters.insert(letter);
-            
+
 			if (letter == guess) {
 				family_key += guess;
 			} else {
@@ -139,13 +139,13 @@ WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
 		letters_in_family[family_key].insert(word_letters.cbegin(),
 											 word_letters.cend());
 
-        // Compare unique lettes in current family to the most unique family
-       if(most_unique_count < letters_in_family[family_key].size()) {
-           most_unique_count = letters_in_family[family_key].size();
-           most_unique_family = family_key;
-       } 
+		// Compare unique lettes in current family to the most unique family
+		if (most_unique_count < letters_in_family[family_key].size()) {
+			most_unique_count  = letters_in_family[family_key].size();
+			most_unique_family = family_key;
+		}
 	}
-    // E1 opt
+	// E1 opt
 	string empty_word(word_length, '-');
 	if (guesses_left == 1 &&
 		word_families.find(empty_word) != word_families.cend()) {
@@ -153,7 +153,8 @@ WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
 	}
 
 
-	return WordFamliyData {word_families[most_unique_family], most_unique_family};
+	return WordFamliyData {word_families[most_unique_family],
+						   most_unique_family};
 }
 
 /*
@@ -230,12 +231,11 @@ void game_loop(vector<string> const& dictionary,
 		unsigned int correct_letters = 0;
 		unsigned int guesses_left	 = settings.guess_count;
 		string current_word(settings.word_length, '-');
-		vector<string> current_word_family = dictionary;
 
 		// Extract words with provided length.
-		vector<string> equal_len_words;
+		vector<string> current_word_family;
 		copy_if(dictionary.cbegin(), dictionary.cend(),
-				back_inserter(equal_len_words),
+				back_inserter(current_word_family),
 				[&settings](string const& word) noexcept {
 					return word.length() == settings.word_length;
 				});
