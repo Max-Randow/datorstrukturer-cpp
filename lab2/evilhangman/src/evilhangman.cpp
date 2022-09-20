@@ -216,12 +216,11 @@ void game_loop(vector<string> const& dictionary,
 		unsigned int correct_letters = 0;
 		unsigned int guesses_left	 = settings.guess_count;
 		string current_word(settings.word_length, '-');
-		vector<string> current_word_family = dictionary;
 
 		// Extract words with provided length.
-		vector<string> equal_len_words;
+		vector<string> current_word_family;
 		copy_if(dictionary.cbegin(), dictionary.cend(),
-				back_inserter(equal_len_words),
+				back_inserter(current_word_family),
 				[&settings](string const& word) noexcept {
 					return word.length() == settings.word_length;
 				});
@@ -284,8 +283,8 @@ void game_loop(vector<string> const& dictionary,
 
 int main() {
 	// Initialize dictionary and set of available word lengths.
-	auto init_pair								   = init_dictionary("di.txt");
-	vector<string> const dictionary				   = move(init_pair.first);
+	auto init_pair					= init_dictionary("dictionary.txt");
+	vector<string> const dictionary = move(init_pair.first);
 	unordered_set<unsigned int> const word_lengths = move(init_pair.second);
 
 	cout << "Welcome to Hangman.\n";
