@@ -117,7 +117,7 @@ WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
 									   unsigned int guesses_left) {
 	unordered_map<string, vector<string>> word_families;
 	unordered_map<string, unordered_set<char>> letters_in_family;
-	string chosen_family_key;
+	string most_unique_family;
 	unsigned int most_unique_count = 0;
 	size_t const word_length	   = dictionary[0].length();
 
@@ -128,7 +128,7 @@ WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
 		for (unsigned int i = 0; i < word_length; ++i) {
 			char const letter = word[i];
 			word_letters.insert(letter);
-
+            
 			if (letter == guess) {
 				family_key += guess;
 			} else {
@@ -138,15 +138,22 @@ WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
 		word_families[family_key].push_back(word);
 		letters_in_family[family_key].insert(word_letters.cbegin(),
 											 word_letters.cend());
-	}
 
+        // Compare unique lettes in current family to the most unique family
+       if(most_unique_count < letters_in_family[family_key].size()) {
+           most_unique_count = letters_in_family[family_key].size();
+           most_unique_family = family_key;
+       } 
+	}
+    // E1 opt
 	string empty_word(word_length, '-');
 	if (guesses_left == 1 &&
 		word_families.find(empty_word) != word_families.cend()) {
 		return WordFamliyData {word_families[empty_word], empty_word};
 	}
 
-	return WordFamliyData {word_families[chosen_family_key], chosen_family_key};
+
+	return WordFamliyData {word_families[most_unique_family], most_unique_family};
 }
 
 /*
