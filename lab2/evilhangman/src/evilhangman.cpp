@@ -1,3 +1,14 @@
+/*
+ * Author: wilmi895, maxra518
+ * Lab 2b: Evil Hangman
+ * Description:
+ * Plays evil hangman game. Asks user for guess and filters word
+ * to make guesses incorrect and harder to guess word, thus winning.
+ * User can play multiple times, choose word lenght, amount of guesses
+ * and if they want to see the possible words to guess.
+ * If the user has one guess left, game specifically tries to choose words
+ * which make the guess wrong.
+ */
 #include <algorithm>
 #include <fstream>
 #include <iostream>
