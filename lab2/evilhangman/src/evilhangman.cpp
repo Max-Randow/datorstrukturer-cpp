@@ -1,3 +1,12 @@
+/*
+ * Author: wilmi895, maxra518
+ * Lab 2b: Evil Hangman
+ * Description:
+ * Plays evil hangman game. Asks user for guess and filters word
+ * to make guesses incorrect and harder to guess word, thus winning.
+ * User can play multiple times, choose word lenght, amount of guesses
+ * and if they want to see the possible words to guess.
+ */
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -72,7 +81,8 @@ GameSettings setup_game(unordered_set<unsigned int> const& word_lengths) {
 	while (true) {
 		cout << "Choose the word length: ";
 		cin >> wanted_word_len;
-        // the iterator did not reach the end thus we found our target, break and continue the program
+		// the iterator did not reach the end thus we found our target, break
+		// and continue the program
 		if (word_lengths.find(wanted_word_len) != word_lengths.cend()) {
 			break;
 		}
@@ -118,8 +128,9 @@ WordFamliyData gen_largest_word_family(vector<string> const& dictionary,
 	for (string const& word : dictionary) {
 		string family_key;
 		// Construct family key for word using letters which match guess.
-        // If our guess matches a letter in a word, save the position of the letter and add it as a key,
-        // no match is represented as '-', ex : family_key = "-a--" and
+		// If our guess matches a letter in a word, save the position of the
+		// letter and add it as a key, no match is represented as '-', ex :
+		// family_key = "-a--" and
 		for (unsigned int i = 0; i < word_length; ++i) {
 			if (word[i] == guess) {
 				family_key += guess;
@@ -187,7 +198,7 @@ struct WordData {
 WordData update_current_word(string const& current_word,
 							 string const& newly_guessed) {
 	size_t const word_length = current_word.length();
-    // Skapa en template sträng som bara är word_length antal '-'
+	// Skapa en template sträng som bara är word_length antal '-'
 	string updated_word(word_length, '-');
 	unsigned int correct_letter_count = 0;
 
@@ -262,7 +273,8 @@ void game_loop(vector<string> const& dictionary,
 			WordFamliyData family_data =
 				gen_largest_word_family(current_word_family, guess);
 
-            // NOTE: move does not make a copy, makes current (moved value) invalid afterwards
+			// NOTE: move does not make a copy, makes current (moved value)
+			// invalid afterwards
 			current_word_family = move(family_data.word_family);
 
 			WordData updated_word_data =
