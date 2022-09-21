@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 8.0.1, 2022-09-21T09:45:15. -->
+<!-- Written by QtCreator 8.0.1, 2022-09-21T23:10:26. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -236,8 +236,8 @@
     <value type="bool" key="Analyzer.QmlProfiler.Settings.UseGlobalSettings">true</value>
     <value type="QString" key="Analyzer.Valgrind.Callgrind.CollectBusEvents">true</value>
     <value type="QString" key="Analyzer.Valgrind.Callgrind.CollectSystime">true</value>
-    <value type="QString" key="Analyzer.Valgrind.Callgrind.EnableBranchSim">true</value>
-    <value type="QString" key="Analyzer.Valgrind.Callgrind.EnableCacheSim">true</value>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.EnableBranchSim">true</value>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.EnableCacheSim">true</value>
     <value type="QString" key="Analyzer.Valgrind.KCachegrindExecutable">/usr/bin/kcachegrind</value>
     <value type="bool" key="Analyzer.Valgrind.Settings.UseGlobalSettings">true</value>
     <value type="QString" key="Analyzer.Valgrind.ValgrindArguments">--leak-check=yes --show-leak-kinds=all --track-origins=yes --verbose --log-file</value>
