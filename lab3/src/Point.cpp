@@ -16,19 +16,19 @@
 
 Point::Point(double _x, double _y) : x(_x), y(_y) {}
 
-double Point::distanceTo(Point that) const {
-	double dx = x - that.x;
-	double dy = y - that.y;
+double Point::distanceTo(Point const that) const {
+	double const dx = x - that.x;
+	double const dy = y - that.y;
 	return std::sqrt(dx * dx + dy * dy);
 }
 
-void Point::draw(QGraphicsScene* scene) const {
+void Point::draw(QGraphicsScene* const scene) const {
 	auto* item = new QGraphicsEllipseItem(x, y, 1, 1);
 	item->setBrush(QBrush(QColor(255, 0, 0)));
 	scene->addItem(item);
 }
 
-void Point::drawTo(Point that, QGraphicsScene* scene) const {
+void Point::drawTo(Point const that, QGraphicsScene* scene) const {
 	auto* item = new QGraphicsLineItem(x, y, that.x, that.y);
 	scene->addItem(item);
 }
@@ -40,7 +40,7 @@ string Point::toString() const {
 	return string.str();
 }
 
-ostream& operator<<(ostream& out, const Point& p) {
+ostream& operator<<(ostream& out, Point const& p) {
 	out << p.toString();
 	return out;
 }

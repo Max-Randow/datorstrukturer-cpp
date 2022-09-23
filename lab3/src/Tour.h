@@ -18,8 +18,8 @@ public:
 	void draw(QGraphicsScene* scene);
 	int size();
 	double distance();
-	void insertNearest(Point p);
-	void insertSmallest(Point p);
+	void insertNearest(Point const p);
+	void insertSmallest(Point const p);
 
 private:
 };
