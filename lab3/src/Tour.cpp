@@ -65,10 +65,10 @@ double Tour::distance() {
 	return 0.0;
 }
 
-void Tour::insertNearest(Point p) {
+void Tour::insertNearest(Point const p) {
 	// TODO: write this member
 }
 
-void Tour::insertSmallest(Point p) {
+void Tour::insertSmallest(Point const p) {
 	// TODO: write this member
 }

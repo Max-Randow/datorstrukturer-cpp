@@ -24,7 +24,7 @@ struct Node {
 	/*
 	 * Constructs a new node storing the given point and next pointer.
 	 */
-	Node(Point p, Node* _next = nullptr);
+	explicit Node(Point p, Node* _next = nullptr);
 
 	/*
 	 * Returns a string representation of the Node for debugging, such as

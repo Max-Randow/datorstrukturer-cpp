@@ -15,11 +15,11 @@ Node::Node(Point p, Node* _next) : point(p.x, p.y), next(_next) {}
 
 string Node::toString() const {
 	stringstream out;
-	out << "Node{addr=" << ((void*)this);
+	out << "Node{addr=" << static_cast<const void*>(this);
 	out << ", point=" << point;
 
 	if (next != nullptr) {
-		out << ", next=" << ((void*)next);
+		out << ", next=" << static_cast<const void*>(next);
 	} else {
 		out << ", next=nullptr";
 	}
