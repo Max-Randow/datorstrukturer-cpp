@@ -24,6 +24,7 @@
 
 #include "Point.h"
 #include "Tour.h"
+using namespace std;
 
 int main(int argc, char* argv[]) {
 	QApplication app(argc, argv);
@@ -45,6 +46,17 @@ int main(int argc, char* argv[]) {
 	view->scale(1, -1);	 // screen y-axis is inverted
 	view->setSceneRect(0, 0, width, height);
 	view->show();
+    
+    // define 4 points forming a square
+    Point p(100.0, 100.0);
+    Point q(500.0, 100.0);
+    Point r(500.0, 500.0);
+    Point s(100.0, 500.0);
+    // Set up a Tour with those four points
+    // The constructor should link p->q->r->s->p
+    Tour squareTour(p, q, r, s);
+    // Output the Tour
+    squareTour.show();
 
 	// run insertion heuristic
 	Tour tour;
@@ -53,11 +65,11 @@ int main(int argc, char* argv[]) {
 	while (input >> x >> y) {
 		Point p(x, y);
 		tour.insertNearest(p);
-		// uncomment the 4 lines below to animate
-		// tour.draw(scene);
-		// std::chrono::milliseconds dura(50);
-		// std::this_thread::sleep_for(dura);
-		// app.processEvents();
+		//uncomment the 4 lines below to animate
+	    //tour.draw(scene);
+		//std::chrono::milliseconds dura(50);
+		//std::this_thread::sleep_for(dura);
+		//app.processEvents();
 	}
 	input.close();
 
