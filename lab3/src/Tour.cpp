@@ -55,9 +55,9 @@ int Tour::size() {
 	int tour_size = 0;
     Node* current_node;
     for(current_node = head->next; current_node != head; current_node = current_node->next){
-        ++size;
+        ++tour_size;
     }
-    return size;
+    return tour_size;
 }
 
 double Tour::distance() {
