@@ -15,8 +15,7 @@ using namespace std;
 
 
 Tour::Tour() {
-    head = new Node(Point {0,0});
-    head->next = head;
+    head = nullptr;
     
 }
     
@@ -24,8 +23,7 @@ Tour::Tour(Point a, Point b, Point c, Point d){
     Node* tmp_node4 = new Node(d);
     Node* tmp_node3 = new Node(c, tmp_node4);
     Node* tmp_node2 = new Node(b, tmp_node3);
-    Node* tmp_node1 = new Node(a, tmp_node2);
-    head            = new Node({0,0}, tmp_node1);
+    head            = new Node(a, tmp_node2);
     tmp_node4->next = head;
     
 }
@@ -38,14 +36,27 @@ Tour::~Tour() {
  * Draws out tour
  */
 void Tour::show() {
-    Node* current_node;
-    for(current_node = head->next; current_node != head; current_node = current_node->next){
-        cout<< "Current point "<<current_node->point.toString() <<endl;        
-    } 
+    Node* current_node = head;
+    if(current_node == nullptr){
+        return;
+    }
+    do{
+        cout<<"Current node: "<< current_node->point.toString() <<endl;
+        current_node = current_node->next;
+    } while (current_node != head);
+
 }
 
 void Tour::draw(QGraphicsScene* scene) {
-	// TODO: write this member
+    Node* current_node = head;
+    if(current_node == nullptr){
+        return;
+    }
+    do{
+        current_node->point.drawTo(current_node->next->point, scene);  
+   } while (current_node != head);
+
+
 }
 
 /*
@@ -53,16 +64,30 @@ void Tour::draw(QGraphicsScene* scene) {
  */
 int Tour::size() {
 	int tour_size = 0;
-    Node* current_node;
-    for(current_node = head->next; current_node != head; current_node = current_node->next){
-        ++tour_size;
+    Node* current_node = head;
+    if(current_node == nullptr){
+        return 0;
     }
+    do{
+        tour_size++;
+        current_node = current_node->next;
+    } while (current_node != head);
     return tour_size;
 }
 
 double Tour::distance() {
-	// TODO: write this member
-	return 0.0;
+    double total_distance = 0.0;
+    Node* current_node = head;
+    if(current_node == nullptr){
+        return 0.0;
+    }
+    do{
+        total_distance += current_node->point.distanceTo(current_node->next->point);
+        current_node = current_node->next;
+    } while (current_node != head);
+
+    return total_distance;
+
 }
 
 void Tour::insertNearest(Point const p) {

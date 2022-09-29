@@ -57,6 +57,10 @@ int main(int argc, char* argv[]) {
     Tour squareTour(p, q, r, s);
     // Output the Tour
     squareTour.show();
+    squareTour.draw(scene);
+
+    cout<< "Square tour distance" << squareTour.distance() <<endl;
+	cout << "Square Tour Number of points: " << squareTour.size() << endl;
 
 	// run insertion heuristic
 	Tour tour;
