@@ -101,34 +101,30 @@ double Tour::distance() const {
 	return total_distance;
 }
 /*
-* Inserts node to nearest node to P
-*/
+ * Inserts node to nearest node to P
+ */
 void Tour::insertNearest(Point const p) {
 	m_size++;
-	if(m_head == nullptr){
-		m_head = new Node(p);
+	if (m_head == nullptr) {
+		m_head		 = new Node(p);
 		m_head->next = m_head;
 		return;
 	}
 	Node* closest_node = nullptr;
+	Node* current_node = m_head;
 	// Max double value
 	double closest_distance = numeric_limits<double>::max();
-	Node* current_node = m_head;
-
 
 	do {
-		double tmp_distance = current_node->point.distanceTo(p);
-		if(tmp_distance < closest_distance){
-			closest_node = current_node;
+		double const tmp_distance = current_node->point.distanceTo(p);
+		if (tmp_distance < closest_distance) {
+			closest_node	 = current_node;
 			closest_distance = tmp_distance;
 		}
 		current_node = current_node->next;
 	} while (current_node != m_head);
 
-	Node* tmp_next_node = closest_node->next;
-	closest_node->next = new Node(p);
-	closest_node->next->next = tmp_next_node;
-	
+	closest_node->next = new Node(p, closest_node->next);
 }
 
 void Tour::insertSmallest(Point const p) {

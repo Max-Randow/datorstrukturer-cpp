@@ -65,18 +65,19 @@ int main(int argc, char* argv[]) {
 	view->setSceneRect(0, 0, width, height);
 	view->show();
 
-	//test_four_points_tour(scene);
+	// test_four_points_tour(scene);
 
 	// run insertion heuristic
 	Tour tour;
 	double x = 0;
 	double y = 0;
 	while (input >> x >> y) {
+		scene->clear();
 		Point p(x, y);
 		tour.insertNearest(p);
-		//uncomment the 4 lines below to animate
+		// uncomment the 4 lines below to animate
 		tour.draw(scene);
-		std::chrono::milliseconds dura(50);
+		std::chrono::milliseconds dura(200);
 		std::this_thread::sleep_for(dura);
 		app.processEvents();
 	}
