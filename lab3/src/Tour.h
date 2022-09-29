@@ -24,7 +24,7 @@ public:
 	void insertSmallest(Point p);
 
 private:
-	Node* const m_head;
+	Node* m_head;
 	int m_size;
 };
 
