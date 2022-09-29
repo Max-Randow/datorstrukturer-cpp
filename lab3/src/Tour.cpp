@@ -14,18 +14,14 @@
 using namespace std;
 
 
-Tour::Tour() {
-    head = nullptr;
-    
-}
-    
-Tour::Tour(Point a, Point b, Point c, Point d){
-    Node* tmp_node4 = new Node(d);
-    Node* tmp_node3 = new Node(c, tmp_node4);
-    Node* tmp_node2 = new Node(b, tmp_node3);
-    head            = new Node(a, tmp_node2);
-    tmp_node4->next = head;
-    
+Tour::Tour() {}
+
+Tour::Tour(Point const a, Point const b, Point const c, Point const d) {
+	Node* tmp_node4 = new Node(d);
+	Node* tmp_node3 = new Node(c, tmp_node4);
+	Node* tmp_node2 = new Node(b, tmp_node3);
+	head			= new Node(a, tmp_node2);
+	tmp_node4->next = head;
 }
 
 Tour::~Tour() {
@@ -35,59 +31,61 @@ Tour::~Tour() {
 /*
  * Draws out tour
  */
-void Tour::show() {
-    Node* current_node = head;
-    if(current_node == nullptr){
-        return;
-    }
-    do{
-        cout<<"Current node: "<< current_node->point.toString() <<endl;
-        current_node = current_node->next;
-    } while (current_node != head);
+void Tour::show() const {
+	if (head == nullptr) {
+		return;
+	}
+	Node const* current_node = head;
 
+	do {
+		cout << "Current node: " << current_node->point.toString() << endl;
+		current_node = current_node->next;
+	} while (current_node != head);
 }
 
-void Tour::draw(QGraphicsScene* scene) {
-    Node* current_node = head;
-    if(current_node == nullptr){
-        return;
-    }
-    do{
-        current_node->point.drawTo(current_node->next->point, scene);  
-   } while (current_node != head);
+void Tour::draw(QGraphicsScene* scene) const {
+	if (head == nullptr) {
+		return;
+	}
+	Node const* current_node = head;
 
-
+	do {
+		current_node->point.drawTo(current_node->next->point, scene);
+		current_node = current_node->next;
+	} while (current_node != head);
 }
 
 /*
  * Returns size of tour
  */
-int Tour::size() {
-	int tour_size = 0;
-    Node* current_node = head;
-    if(current_node == nullptr){
-        return 0;
-    }
-    do{
-        tour_size++;
-        current_node = current_node->next;
-    } while (current_node != head);
-    return tour_size;
+int Tour::size() const {
+	if (head == nullptr) {
+		return 0;
+	}
+	int tour_size			 = 0;
+	Node const* current_node = head;
+
+	do {
+		tour_size++;
+		current_node = current_node->next;
+	} while (current_node != head);
+	return tour_size;
 }
 
-double Tour::distance() {
-    double total_distance = 0.0;
-    Node* current_node = head;
-    if(current_node == nullptr){
-        return 0.0;
-    }
-    do{
-        total_distance += current_node->point.distanceTo(current_node->next->point);
-        current_node = current_node->next;
-    } while (current_node != head);
+double Tour::distance() const {
+	if (head == nullptr) {
+		return 0.0;
+	}
+	double total_distance	 = 0.0;
+	Node const* current_node = head;
 
-    return total_distance;
+	do {
+		total_distance +=
+			current_node->point.distanceTo(current_node->next->point);
+		current_node = current_node->next;
+	} while (current_node != head);
 
+	return total_distance;
 }
 
 void Tour::insertNearest(Point const p) {
