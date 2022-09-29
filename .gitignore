@@ -2,3 +2,6 @@ build-*
 *.txt
 *.ans
 *.o
+*.pro.user
+Makefile
+.qmake.stash

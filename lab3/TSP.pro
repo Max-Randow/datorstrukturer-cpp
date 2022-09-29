@@ -1,6 +1,6 @@
 QT += widgets
-# Used to turn off warnings on qt headers.
-QMAKE_CXXFLAGS += -isystem $$[QT_INSTALL_HEADERS]
+# Used to turn off warnings on qt m_headers.
+QMAKE_CXXFLAGS += -isystem $$[QT_INSTALL_M_HEADERS]
 
 QMAKE_CXXFLAGS += -std=c++17 -m64 -pipe -fstack-clash-protection -fstack-protector-strong
 
@@ -24,8 +24,8 @@ QMAKE_LFLAGS += -m64
 
 SOURCES = $$PWD/src/*.cpp
 #SOURCES += $$PWD/lib/*.cpp
-HEADERS = $$PWD/src/*.h
-#HEADERS += $$PWD/lib/*.h
+m_headERS = $$PWD/src/*.h
+#m_headERS += $$PWD/lib/*.h
 
 INCLUDEPATH += $$PWD/lib/
 

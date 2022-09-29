@@ -18,8 +18,8 @@ using namespace std;
  * used in a TSP tour.
  */
 struct Node {
-	Point point;  // this nodes point
-	Node* next;	  // pointer to next node in the list  (nullptr if none)
+	Point const point;	// this nodes point
+	Node* next;			// pointer to next node in the list  (nullptr if none)
 
 	/*
 	 * Constructs a new node storing the given point and next pointer.
