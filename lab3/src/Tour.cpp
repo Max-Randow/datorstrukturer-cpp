@@ -129,5 +129,31 @@ void Tour::insertNearest(Point const p) {
 
 void Tour::insertSmallest(Point const p) {
 	m_size++;
-	// TODO: write this member
+	if (m_head == nullptr) {
+		m_head		 = new Node(p);
+		m_head->next = m_head;
+		return;
+	}
+	double min_distance = numeric_limits<double>::max();
+	Node* current_node = m_head;
+	Node* chosen_node = nullptr;
+
+	do {
+		// Insert temporary P node to check distance
+		current_node->next = new Node(p, current_node->next);
+		double curr_distance = distance();
+		if (curr_distance < min_distance){
+			min_distance = curr_distance;
+			chosen_node = current_node;
+		}
+		// Remove inserted P node
+		Node* next_next = current_node->next->next;
+		delete current_node->next;
+		current_node->next = next_next;
+		current_node = next_next;		
+
+	} while(current_node != m_head);
+
+	chosen_node->next = new Node(p, chosen_node->next);
+	
 }
