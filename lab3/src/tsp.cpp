@@ -26,6 +26,9 @@
 #include "Tour.h"
 using namespace std;
 
+/*
+ * Test function for testing Tour class with four points.
+ */
 void test_four_points_tour(QGraphicsScene* const scene) {
 	// define 4 points forming a square
 	Point const a(100.0, 100.0);
@@ -76,10 +79,10 @@ int main(int argc, char* argv[]) {
 		Point p(x, y);
 		tour.insertSmallest(p);
 		// uncomment the 4 lines below to animate
-		tour.draw(scene);
-		std::chrono::milliseconds dura(200);
-		std::this_thread::sleep_for(dura);
-		app.processEvents();
+		// tour.draw(scene);
+		// std::chrono::milliseconds dura(1);
+		// std::this_thread::sleep_for(dura);
+		// app.processEvents();
 	}
 	input.close();
 

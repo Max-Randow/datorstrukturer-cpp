@@ -1,8 +1,9 @@
-// This is the .h file you will edit and turn in.
-// We have provided a skeleton for you,
-// but you must finish it as described in the spec.
-// Also remove these comments here and add your own, as well as on the members.
-// TODO: remove this comment m_header
+/*
+ * Author: wilmi895, maxra518
+ * Description:
+ * Tour describes a circular list of nodes with coordinate points.
+ * Algorithms for tsp problem is defined in the class for inserting.
+ */
 
 #ifndef TOUR_H
 #define TOUR_H
@@ -25,7 +26,6 @@ public:
 
 private:
 	Node* m_head;
-	int m_size;
 };
 
 #endif	// TOUR_H

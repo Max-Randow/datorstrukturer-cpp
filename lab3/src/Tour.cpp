@@ -1,8 +1,9 @@
-// This is the .cpp file you will edit and turn in.
-// We have provided a skeleton for you,
-// but you must finish it as described in the spec.
-// Also remove these comments here and add your own.
-// TODO: remove this comment m_header
+/*
+ * Author: wilmi895, maxra518
+ * Description:
+ * Tour describes a circular list of nodes with coordinate points.
+ * Algorithms for tsp problem is defined in the class for inserting.
+ */
 
 #include "Tour.h"
 
@@ -15,15 +16,24 @@
 
 using namespace std;
 
-Tour::Tour() noexcept : m_head(nullptr), m_size(0) {}
+/*
+ * Default constructor.
+ */
+Tour::Tour() noexcept : m_head(nullptr) {}
 
+/*
+ * Helper constructor for testing 4 points.
+ */
 Tour::Tour(Point const a, Point const b, Point const c, Point const d) :
-	m_head(new Node(a, nullptr)), m_size(4) {
+	m_head(new Node(a, nullptr)) {
 	m_head->next			 = new Node(b);
 	m_head->next->next		 = new Node(c);
 	m_head->next->next->next = new Node(d, m_head);
 }
 
+/*
+ * Destructor deallocates all nodes in tour.
+ */
 Tour::~Tour() {
 	if (m_head == nullptr) {
 		return;
@@ -52,6 +62,9 @@ void Tour::show() const noexcept {
 	} while (current_node != m_head);
 }
 
+/*
+ * Draws Tour to a scene.
+ */
 void Tour::draw(QGraphicsScene* const scene) const {
 	if (m_head == nullptr) {
 		return;
@@ -68,7 +81,6 @@ void Tour::draw(QGraphicsScene* const scene) const {
  * Returns size of tour
  */
 int Tour::size() const noexcept {
-	/*
 	if (m_head == nullptr) {
 		return 0;
 	}
@@ -80,11 +92,11 @@ int Tour::size() const noexcept {
 		current_node = current_node->next;
 	} while (current_node != m_head);
 	return tour_size;
-	*/
-
-	return m_size;
 }
 
+/*
+ * Calculates the distance of tour.
+ */
 double Tour::distance() const {
 	if (m_head == nullptr) {
 		return 0.0;
@@ -104,18 +116,17 @@ double Tour::distance() const {
  * Inserts node to nearest node to P
  */
 void Tour::insertNearest(Point const p) {
-	m_size++;
 	if (m_head == nullptr) {
 		m_head		 = new Node(p);
 		m_head->next = m_head;
 		return;
 	}
-	Node* closest_node = nullptr;
-	Node* current_node = m_head;
-	// Max double value
 	double closest_distance = numeric_limits<double>::max();
+	Node* closest_node		= nullptr;
+	Node* current_node		= m_head;
 
 	do {
+		// Choose the nearest point.
 		double const tmp_distance = current_node->point.distanceTo(p);
 		if (tmp_distance < closest_distance) {
 			closest_node	 = current_node;
@@ -127,33 +138,33 @@ void Tour::insertNearest(Point const p) {
 	closest_node->next = new Node(p, closest_node->next);
 }
 
+/*
+ * Inserts node where the total distance is increased minimally.
+ */
 void Tour::insertSmallest(Point const p) {
-	m_size++;
 	if (m_head == nullptr) {
 		m_head		 = new Node(p);
 		m_head->next = m_head;
 		return;
 	}
-	double min_distance = numeric_limits<double>::max();
-	Node* current_node = m_head;
-	Node* chosen_node = nullptr;
+	double min_rel_distance = numeric_limits<double>::max();
+	Node* current_node		= m_head;
+	Node* chosen_node		= nullptr;
 
 	do {
-		// Insert temporary P node to check distance
-		current_node->next = new Node(p, current_node->next);
-		double curr_distance = distance();
-		if (curr_distance < min_distance){
-			min_distance = curr_distance;
-			chosen_node = current_node;
-		}
-		// Remove inserted P node
-		Node* next_next = current_node->next->next;
-		delete current_node->next;
-		current_node->next = next_next;
-		current_node = next_next;		
+		// Calculate relative difference when inserting p.
+		double rel_distance =
+			current_node->point.distanceTo(p) +
+			p.distanceTo(current_node->next->point) -
+			current_node->point.distanceTo(current_node->next->point);
 
-	} while(current_node != m_head);
+		// Choose minimal distance change.
+		if (rel_distance < min_rel_distance) {
+			min_rel_distance = rel_distance;
+			chosen_node		 = current_node;
+		}
+		current_node = current_node->next;
+	} while (current_node != m_head);
 
 	chosen_node->next = new Node(p, chosen_node->next);
-	
 }
