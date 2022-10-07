@@ -26,6 +26,8 @@ public:
 
 private:
 	Node* m_head;
+	bool intersects(Node const* const segment1,
+					Node const* const segment2) const;
 };
 
 #endif	// TOUR_H

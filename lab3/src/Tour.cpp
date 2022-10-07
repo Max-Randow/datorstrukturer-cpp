@@ -54,6 +54,7 @@ void Tour::show() const noexcept {
 	if (m_head == nullptr) {
 		return;
 	}
+
 	Node const* current_node = m_head;
 
 	do {
@@ -167,4 +168,30 @@ void Tour::insertSmallest(Point const p) {
 	} while (current_node != m_head);
 
 	chosen_node->next = new Node(p, chosen_node->next);
+}
+
+bool Tour::intersects(Node const* const segment1,
+					  Node const* const segment2) const {
+	if (segment1 == segment2 || segment1->next == segment2 ||
+		segment2->next == segment1) {
+		return false;
+	}
+	Point const p1 = segment1->point;
+	Point const p2 = segment1->next->point;
+	Point const p3 = segment2->point;
+	Point const p4 = segment2->next->point;
+
+	double const denom =
+		(p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x);
+
+	if (denom == 0.0) {
+		return false;
+	}
+
+	double const t =
+		((p1.x - p3.x) * (p3.y - p4.y) - (p1.y - p3.y) * (p3.x - p4.x)) / denom;
+	double const u =
+		((p1.x - p3.x) * (p1.y - p2.y) - (p1.y - p3.y) * (p1.x - p2.x)) / denom;
+
+	return (0 <= t) && (t <= 1) && (0 <= u) && (u <= 1);
 }
