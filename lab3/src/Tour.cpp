@@ -98,7 +98,7 @@ int Tour::size() const noexcept {
 /*
  * Calculates the distance of tour.
  */
-double Tour::distance() const {
+double Tour::distance() const noexcept {
 	if (m_head == nullptr) {
 		return 0.0;
 	}
@@ -154,7 +154,7 @@ void Tour::insertSmallest(Point const p) {
 
 	do {
 		// Calculate relative difference when inserting p.
-		double rel_distance =
+		double const rel_distance =
 			current_node->point.distanceTo(p) +
 			p.distanceTo(current_node->next->point) -
 			current_node->point.distanceTo(current_node->next->point);
@@ -170,8 +170,36 @@ void Tour::insertSmallest(Point const p) {
 	chosen_node->next = new Node(p, chosen_node->next);
 }
 
+/*
+ * Swaps two node segments. Follows the swap algorithm described by the 2opt tsp
+ * algorithm. Wiki: https://en.wikipedia.org/wiki/2-opt
+ */
+void Tour::twoOptSwap(Node* const segment1, Node* const segment2) noexcept {
+	Node* const p1	   = segment1;
+	Node* const p3	   = segment2;
+	Node* const p4	   = p3->next;
+	Node* current_node = p1->next;	// p2
+	Node* prev_node	   = p4;
+	Node* next_node	   = current_node->next;
+
+	while (current_node != p4) {
+		// Reverse current node's pointer
+		current_node->next = prev_node;
+		// Move pointers one position ahead.
+		prev_node	 = current_node;
+		current_node = next_node;
+		// Store next node
+		next_node = next_node->next;
+	}
+	p1->next = p3;
+}
+
+/*
+ * Checks if two 2D line segments intersects.
+ * Segments here being two nodes with respective connected node.
+ */
 bool Tour::intersects(Node const* const segment1,
-					  Node const* const segment2) const {
+					  Node const* const segment2) noexcept {
 	if (segment1 == segment2 || segment1->next == segment2 ||
 		segment2->next == segment1) {
 		return false;
@@ -193,5 +221,28 @@ bool Tour::intersects(Node const* const segment1,
 	double const u =
 		((p1.x - p3.x) * (p1.y - p2.y) - (p1.y - p3.y) * (p1.x - p2.x)) / denom;
 
-	return (0 <= t) && (t <= 1) && (0 <= u) && (u <= 1);
+	return (0.0 <= t) && (t <= 1.0) && (0.0 <= u) && (u <= 1.0);
+}
+
+/*
+ * Inserts using insertSmallest algorithms and then swaps nodes to remove line
+ * intersections.
+ */
+void Tour::insertNoIntersections(Point const p) {
+	insertSmallest(p);
+
+	Node* current_node = m_head;
+
+	do {
+		Node* node = current_node;
+
+		do {
+			if (intersects(current_node, node)) {
+				twoOptSwap(current_node, node);
+			}
+			node = node->next;
+		} while (node != m_head);
+
+		current_node = current_node->next;
+	} while (current_node != m_head);
 }

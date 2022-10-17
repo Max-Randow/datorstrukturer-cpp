@@ -20,14 +20,17 @@ public:
 	void show() const noexcept;
 	void draw(QGraphicsScene* scene) const;
 	int size() const noexcept;
-	double distance() const;
+	double distance() const noexcept;
 	void insertNearest(Point p);
 	void insertSmallest(Point p);
+	void insertNoIntersections(Point p);
 
 private:
 	Node* m_head;
-	bool intersects(Node const* const segment1,
-					Node const* const segment2) const;
+
+	static void twoOptSwap(Node* const segment1, Node* const segment2) noexcept;
+	static bool intersects(Node const* const segment1,
+						   Node const* const segment2) noexcept;
 };
 
 #endif	// TOUR_H
