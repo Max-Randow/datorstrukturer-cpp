@@ -176,11 +176,12 @@ void Tour::insertSmallest(Point const p) {
  */
 void Tour::twoOptSwap(Node* const segment1, Node* const segment2) noexcept {
 	Node* const p1	   = segment1;
+	Node* const p2	   = segment1->next;
 	Node* const p3	   = segment2;
-	Node* const p4	   = p3->next;
-	Node* current_node = p1->next;	// p2
+	Node* const p4	   = segment2->next;
+	Node* current_node = p2;  // p2
+	Node* next_node	   = p2->next;
 	Node* prev_node	   = p4;
-	Node* next_node	   = current_node->next;
 
 	while (current_node != p4) {
 		// Reverse current node's pointer
@@ -197,6 +198,8 @@ void Tour::twoOptSwap(Node* const segment1, Node* const segment2) noexcept {
 /*
  * Checks if two 2D line segments intersects.
  * Segments here being two nodes with respective connected node.
+ * See wiki:
+ * https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line_segment
  */
 bool Tour::intersects(Node const* const segment1,
 					  Node const* const segment2) noexcept {

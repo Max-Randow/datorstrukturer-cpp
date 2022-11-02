@@ -50,7 +50,7 @@ void test_four_points_tour(QGraphicsScene* const scene) {
 int main(int argc, char* argv[]) {
 	QApplication app(argc, argv);
 
-	string filename = "tsp1000.txt";
+	string filename = "circuit1290.txt";
 	ifstream input;
 	input.open(filename);
 
