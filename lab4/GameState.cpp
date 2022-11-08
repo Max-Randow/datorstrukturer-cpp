@@ -5,116 +5,121 @@
  */
 
 #include "GameState.h"
-#include "Robot.h"
-#include "utilities.h"
-#include "constants.h"
+
 #include <iostream>
+
+#include "Robot.h"
+#include "constants.h"
+#include "utilities.h"
 
 
 GameState::GameState(int numberOfRobots) {
-   for (int i = 0; i < numberOfRobots; i++) {
-        Robot* robot = new Robot();
-        while(!isEmpty(*robot)){
-            delete robot;
-            robot = new Robot();
-        }
-        robots.push_back(robot);
-    }
-    teleportHero();
+	for (int i = 0; i < numberOfRobots; i++) {
+		auto* robot = new Robot();
+		while (!isEmpty(*robot)) {
+			delete robot;
+			robot = new Robot();
+		}
+		robots.push_back(robot);
+	}
+	teleportHero();
 }
 
-GameState::~GameState(){
-    for(Robot* robot : robots) {
-        delete robot;
-    }
+GameState::~GameState() {
+	// Crash without copy constructors.
+	for (Robot* robot : robots) {
+		delete robot;
+	}
 }
 
-void GameState::draw(QGraphicsScene *scene) const {
-    scene->clear();
-    hero.draw(scene);
-    for (const Robot* robot: robots)
-        robot->draw(scene);
+void GameState::draw(QGraphicsScene* scene) const {
+	scene->clear();
+	hero.draw(scene);
+	for (const Robot* robot : robots) {
+		robot->draw(scene);
+	}
 }
 
 void GameState::teleportHero() {
-    do hero.teleport();
-    while (!isEmpty(hero));
+	do {
+		hero.teleport();
+	} while (!isEmpty(hero));
 }
 
 void GameState::moveRobots() {
-    for(Robot* robot: robots){
-        if(robot->canMove()){
-        robot->moveTowards(hero);
-        }
-    }
+	for (Robot* robot : robots) {
+		if (robot->canMove()) {
+			robot->moveTowards(hero);
+		}
+	}
 }
-
 
 
 void GameState::updateCrashes() {
-    for(unsigned i=0; i < robots.size(); ++i){
-        for(unsigned o=i+1; o < robots.size(); ++o){
-            if(robots[i]->at(*robots[o])){
-                robots[i]->doCrash();
-                robots[o]->doCrash();
-            }
-        }
-    }
+	for (unsigned i = 0; i < robots.size(); ++i) {
+		for (unsigned o = i + 1; o < robots.size(); ++o) {
+			if (robots[i]->at(*robots[o])) {
+				robots[i]->doCrash();
+				robots[o]->doCrash();
+			}
+		}
+	}
 }
 
-int GameState::countJustCrashed()const{
-    int numberDestroyed =0;
-    for(unsigned i=0; i < robots.size(); ++i)
-        if(robots[i]->justCrashed())
-            numberDestroyed++;
-    return numberDestroyed;
+int GameState::countJustCrashed() const {
+	int numberDestroyed = 0;
+	for (unsigned i = 0; i < robots.size(); ++i) {
+		if (robots[i]->justCrashed()) {
+			numberDestroyed++;
+		}
+	}
+	return numberDestroyed;
 }
 
-void GameState::junkTheCrashed(){
-    for(unsigned i=0; i < robots.size(); ++i){
-        if (robots[i]->justCrashed()) {
-            robots.push_back(new Junk(robots[i]->asPoint()));
-            delete robots[i];
-            robots[i] = robots[robots.size()-1];
-            robots.pop_back();
-
-        }
-    }
+void GameState::junkTheCrashed() {
+	for (unsigned i = 0; i < robots.size(); ++i) {
+		if (robots[i]->justCrashed()) {
+			const Point p = robots[i]->asPoint();
+			delete robots[i];
+			robots[i] = new Junk(p);
+		}
+	}
 }
 
 bool GameState::stillLiveRobots() const {
-    for(unsigned i=0; i < robots.size(); ++i)
-        if(robots[i]->canMove())
-            return true;
-    return false;
+	for (unsigned i = 0; i < robots.size(); ++i) {
+		if (robots[i]->canMove()) {
+			return true;
+		}
+	}
+	return false;
 }
 
 
 bool GameState::heroDead() const {
-    for(const Robot* robot: robots){
-        if(hero.at(*robot)){
-            return true;
-        }
-    }
-
-    return false;
+	for (const Robot* robot : robots) {
+		if (hero.at(*robot)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 
 void GameState::moveHeroTowards(const Point& dir) {
-    hero.moveTowards(dir);
+	hero.moveTowards(Unit(dir));
 }
 
-Point GameState::getHeroAsPoint() const {return hero.asPoint();}
+Point GameState::getHeroAsPoint() const { return hero.asPoint(); }
 
 /*
  * Free of robots and junk
  */
 bool GameState::isEmpty(const Unit& unit) const {
-    for(const Robot* robot: robots)
-        if(robot->at(unit)){
-            return false;
-        }
-    return true;
+	for (const Robot* robot : robots) {
+		if (robot->at(unit)) {
+			return false;
+		}
+	}
+	return true;
 }
-

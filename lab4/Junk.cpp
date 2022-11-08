@@ -4,27 +4,20 @@
  */
 
 #include "Junk.h"
+
 #include "constants.h"
 
 
-
-
-void Junk::draw(QGraphicsScene *scene) const {
-    Point corner = asPoint();
-    scene->addEllipse(QRectF(corner.x * UNIT_WIDTH, corner.y * UNIT_HEIGHT,
-                             JUNK_RADIUS, JUNK_RADIUS), QPen(), QBrush(JUNK_COLOR));
+void Junk::draw(QGraphicsScene* scene) const {
+	Point corner = asPoint();
+	scene->addEllipse(QRectF(corner.x * UNIT_WIDTH, corner.y * UNIT_HEIGHT,
+							 JUNK_RADIUS, JUNK_RADIUS),
+					  QPen(), QBrush(JUNK_COLOR));
 }
 
 
-bool Junk::canMove() const{
-    return false;
-}
+bool Junk::canMove() const { return false; }
 
-void Junk::doCrash(){
-    
-}
+void Junk::doCrash() {}
 
-bool Junk::justCrashed() const{
-    return false;
-
-}
+bool Junk::justCrashed() const { return false; }

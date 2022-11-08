@@ -6,18 +6,16 @@
 #ifndef HERO_H
 #define HERO_H
 
-#include "Unit.h"
 #include <QGraphicsScene>
 
+#include "Unit.h"
+
 class Hero : public Unit {
-
 public:
-
-    /*
-    * Draws this hero onto the given QGraphicsScene.
-    */
-    void draw(QGraphicsScene *scene) const;
-
+	/*
+	 * Draws this hero onto the given QGraphicsScene.
+	 */
+	void draw(QGraphicsScene* scene) const override;
 };
 
-#endif // HERO_H
+#endif	// HERO_H

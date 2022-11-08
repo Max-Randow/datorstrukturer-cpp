@@ -6,46 +6,38 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
-#include "Unit.h"
 #include <QGraphicsScene>
 
+#include "Unit.h"
+
 class Robot : public Unit {
-    bool crashed = false;
+	bool crashed = false;
 
 public:
+	explicit Robot(const Point& p) : Unit(p) {}
 
-    Robot(const Point& p): Unit(p){
-        
-        
+	Robot() = default;
 
-    }
+	/*
+	 * did not crash yet
+	 */
+	virtual bool canMove() const;
 
-    Robot(): Unit(){
+	/*
+	 * Crashes and remembers it
+	 */
+	virtual void doCrash();
 
-    }
-
-    /*
-     * did not crash yet
-     */
-    virtual bool canMove() const;
-
-    /*
-     * Crashes and remembers it
-     */
-   virtual void doCrash();
-
-    /*
-     * Return whether the robot crashed
-     */
-   virtual bool justCrashed() const;
+	/*
+	 * Return whether the robot crashed
+	 */
+	virtual bool justCrashed() const;
 
 
-    /*
-    * Draws this robot onto the given QGraphicsScene.
-    */
-    virtual void draw(QGraphicsScene* scene) const;
-
-
+	/*
+	 * Draws this robot onto the given QGraphicsScene.
+	 */
+	virtual void draw(QGraphicsScene* scene) const;
 };
 
-#endif // ROBOT_H
+#endif	// ROBOT_H

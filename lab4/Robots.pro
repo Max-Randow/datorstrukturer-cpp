@@ -47,7 +47,6 @@ SOURCES += mainwindow.cpp \
 	GameState.cpp \
 	qgameoverwindow.cpp \
 	qresetbutton.cpp
-QMAKE_CXXFLAGS += -std=c++11
 macx {
 	cache()
 }

@@ -7,64 +7,65 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-#include "utilities.h"
 #include <QGraphicsScene>
+
+#include "utilities.h"
 
 /* Root class for all pieces on the board.
  * Subclasses are Robot, Hero and Junk.
  */
 class Unit {
 public:
+	/*
+	 * Create a unit at a random position
+	 */
+	Unit();
 
-    /*
-     * Create a unit at a random position
-     */
-    Unit();
+	/*
+	 * Create unit at given point
+	 */
+	explicit Unit(const Point& p);
 
-    /*
-    * Create unit at given point
-    */
-    Unit(const Point& p);
+	virtual ~Unit() = default;
 
-    virtual ~Unit(){}
+	/*
+	 * Return Point representation of Unit
+	 */
+	Point asPoint() const;
 
-    /*
-    * Return Point representation of Unit
-    */
-    Point asPoint() const;
-
-    /*
-    * Am I in the same square as u?
-    */
-    bool at(const Unit& u) const;
-
-
-    /*
-    * Take one step closer to u
-    */
-    virtual void moveTowards(const Unit&);
+	/*
+	 * Am I in the same square as u?
+	 */
+	bool at(const Unit& u) const;
 
 
-    /*
-    * Teleport. Does not check for collision
-    */
-    void teleport();
+	/*
+	 * Take one step closer to u
+	 */
+	virtual void moveTowards(const Unit&);
 
-    /*
-    * Euclidean distance to u
-    */
-    double distanceTo(const Unit& u) const;
 
-    /*
-    * Draw
-    */
-    virtual void draw();
+	/*
+	 * Teleport. Does not check for collision
+	 */
+	void teleport();
+
+	/*
+	 * Euclidean distance to u
+	 */
+	double distanceTo(const Unit& u) const;
+
+	/*
+	 * Draw object to scene
+	 */
+	virtual void draw(QGraphicsScene* scene) const;
+
 private:
-    int x;  // x position of this unit
-    int y;  // y position of this unit
+	int x;	// x position of this unit
+	int y;	// y position of this unit
 
-    // private helpers
-    void checkBounds();
+	// private helpers
+	void checkBounds();
 };
 
-#endif // UNIT_H
+#endif	// UNIT_H

@@ -6,36 +6,34 @@
 #ifndef JUNK_H
 #define JUNK_H
 
+#include <QGraphicsScene>
+
 #include "Robot.h"
 #include "Unit.h"
-#include <QGraphicsScene>
 
 class Junk : public Robot {
 public:
-    Junk(const Point& p): Robot(p){}
+	explicit Junk(const Point& p) : Robot(p) {}
 
-    /*
-    * Draws this junk onto the given QGraphicsScene.
-    */
-    void draw(QGraphicsScene* scene) const;
-    
-    /*
-     * did not crash yet
-     */
-    bool canMove() const;
+	/*
+	 * Draws this junk onto the given QGraphicsScene.
+	 */
+	void draw(QGraphicsScene* scene) const override;
 
-    /*
-     * Crashes and remembers it
-     */
-    void doCrash();
+	/*
+	 * did not crash yet
+	 */
+	bool canMove() const override;
 
-    /*
-     * Return whether the robot crashed
-     */
-    bool justCrashed() const;
+	/*
+	 * Crashes and remembers it
+	 */
+	void doCrash() override;
 
-    
-    
+	/*
+	 * Return whether the robot crashed
+	 */
+	bool justCrashed() const override;
 };
 
-#endif // JUNK_H
+#endif	// JUNK_H
