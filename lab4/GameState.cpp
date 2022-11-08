@@ -5,6 +5,7 @@
  */
 
 #include "GameState.h"
+#include "Robot.h"
 #include "utilities.h"
 #include "constants.h"
 #include <iostream>
@@ -12,22 +13,27 @@
 
 GameState::GameState(int numberOfRobots) {
    for (int i = 0; i < numberOfRobots; i++) {
-        Robot robot;
-        while(!isEmpty(robot)){
-            robot = Robot();
+        Robot* robot = new Robot();
+        while(!isEmpty(*robot)){
+            delete robot;
+            robot = new Robot();
         }
         robots.push_back(robot);
     }
     teleportHero();
 }
 
+GameState::~GameState(){
+    for(Robot* robot : robots) {
+        delete robot;
+    }
+}
+
 void GameState::draw(QGraphicsScene *scene) const {
     scene->clear();
     hero.draw(scene);
-    for (const Robot& robot: robots)
-        robot.draw(scene);
-    for (const Junk& junk: junks)
-        junk.draw(scene);
+    for (const Robot* robot: robots)
+        robot->draw(scene);
 }
 
 void GameState::teleportHero() {
@@ -36,22 +42,21 @@ void GameState::teleportHero() {
 }
 
 void GameState::moveRobots() {
-    for(Robot& robot: robots)
-        robot.moveTowards(hero);
+    for(Robot* robot: robots){
+        if(robot->canMove()){
+        robot->moveTowards(hero);
+        }
+    }
 }
+
 
 
 void GameState::updateCrashes() {
     for(unsigned i=0; i < robots.size(); ++i){
-        for(unsigned j=0; j < junks.size(); ++j){
-            if(robots[i].at(junks[j])){
-                robots[i].doCrash();
-            }
-        }
         for(unsigned o=i+1; o < robots.size(); ++o){
-            if(robots[i].at(robots[o])){
-                robots[i].doCrash();
-                robots[o].doCrash();
+            if(robots[i]->at(*robots[o])){
+                robots[i]->doCrash();
+                robots[o]->doCrash();
             }
         }
     }
@@ -60,40 +65,38 @@ void GameState::updateCrashes() {
 int GameState::countJustCrashed()const{
     int numberDestroyed =0;
     for(unsigned i=0; i < robots.size(); ++i)
-        if(robots[i].justCrashed())
+        if(robots[i]->justCrashed())
             numberDestroyed++;
     return numberDestroyed;
 }
 
 void GameState::junkTheCrashed(){
     for(unsigned i=0; i < robots.size(); ++i){
-        if (robots[i].justCrashed()) {
-            junks.push_back(Junk(robots[i].asPoint()));
+        if (robots[i]->justCrashed()) {
+            robots.push_back(new Junk(robots[i]->asPoint()));
+            delete robots[i];
             robots[i] = robots[robots.size()-1];
             robots.pop_back();
+
         }
     }
 }
 
 bool GameState::stillLiveRobots() const {
     for(unsigned i=0; i < robots.size(); ++i)
-        if(robots[i].canMove())
+        if(robots[i]->canMove())
             return true;
     return false;
 }
 
 
 bool GameState::heroDead() const {
-    for(const Robot& robot: robots){
-        if(hero.at(robot)){
+    for(const Robot* robot: robots){
+        if(hero.at(*robot)){
             return true;
         }
     }
-    for(const Junk& junk: junks){
-        if(hero.at(junk)){
-            return true;
-        }
-    }
+
     return false;
 }
 
@@ -108,12 +111,10 @@ Point GameState::getHeroAsPoint() const {return hero.asPoint();}
  * Free of robots and junk
  */
 bool GameState::isEmpty(const Unit& unit) const {
-    for(const Robot& robot: robots)
-        if(robot.at(unit))
+    for(const Robot* robot: robots)
+        if(robot->at(unit)){
             return false;
-    for(const Junk& junk: junks)
-        if(junk.at(unit))
-            return false;
+        }
     return true;
 }
 

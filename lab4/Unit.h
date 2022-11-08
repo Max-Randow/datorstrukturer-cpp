@@ -42,7 +42,7 @@ public:
     /*
     * Take one step closer to u
     */
-    void moveTowards(const Unit&);
+    virtual void moveTowards(const Unit&);
 
 
     /*
@@ -54,6 +54,11 @@ public:
     * Euclidean distance to u
     */
     double distanceTo(const Unit& u) const;
+
+    /*
+    * Draw
+    */
+    virtual void draw();
 private:
     int x;  // x position of this unit
     int y;  // y position of this unit

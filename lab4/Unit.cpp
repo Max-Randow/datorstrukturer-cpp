@@ -47,6 +47,9 @@ double Unit::distanceTo(const Unit& u) const {
     double dy = u.y - y;
     return sqrt(dx * dx + dy * dy);
 }
+ void Unit::draw() {
+
+}
 
 /*
  * Put this unit inside playing field if outside
