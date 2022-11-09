@@ -1,6 +1,4 @@
 TEMPLATE = app
-CONFIG += c++17
-CONFIG += qt
 QT += widgets
 
 # Used to turn off warnings for qt headers.
@@ -10,7 +8,7 @@ QMAKE_CXXFLAGS += -std=c++17 -m64 -pipe -fstack-clash-protection -fstack-protect
 
 # Warnings
 QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wunused -Wold-style-cast -Woverloaded-virtual -Wnull-dereference
-QMAKE_CXXFLAGS += -Wconversion -Wdouble-promotion -Wmismatched-new-delete
+QMAKE_CXXFLAGS += -Wconversion -Wdouble-promotion
 # GCC specific
 QMAKE_CXXFLAGS += -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wuseless-cast -Wunsafe-loop-optimizations
 
@@ -28,25 +26,25 @@ QMAKE_LFLAGS += -m64
 
 
 HEADERS += mainwindow.h \
-	utilities.h \
-	constants.h \
-	Unit.h \
-	Junk.h \
-	Hero.h \
-	Robot.h \
-	GameState.h \
-	qgameoverwindow.h \
-	qresetbutton.h
+        utilities.h \
+        constants.h \
+        Unit.h \
+        Junk.h \
+        Hero.h \
+        Robot.h \
+        GameState.h \
+        qgameoverwindow.h \
+        qresetbutton.h
 SOURCES += mainwindow.cpp \
-	robotsmain.cpp \
-	utilities.cpp \
-	Unit.cpp \
-	Junk.cpp \
-	Hero.cpp \
-	Robot.cpp \
-	GameState.cpp \
-	qgameoverwindow.cpp \
-	qresetbutton.cpp
+        robotsmain.cpp \
+        utilities.cpp \
+        Unit.cpp \
+        Junk.cpp \
+        Hero.cpp \
+        Robot.cpp \
+        GameState.cpp \
+        qgameoverwindow.cpp \
+        qresetbutton.cpp
 macx {
-	cache()
+        cache()
 }
