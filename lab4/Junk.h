@@ -34,8 +34,11 @@ public:
 	 * Return whether the robot crashed
 	 */
 	bool justCrashed() const override;
-    
-    virtual Robot* clone();
+
+	/*
+	 * Clones Junk object
+	 */
+	Robot* clone() const override;
 };
 
 #endif	// JUNK_H

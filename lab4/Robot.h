@@ -36,12 +36,12 @@ public:
 	/*
 	 * Draws this robot onto the given QGraphicsScene.
 	 */
-	virtual void draw(QGraphicsScene* scene) const;
+	virtual void draw(QGraphicsScene* scene) const override;
 
-    /*
-    * Clones a robot
-    */
-    virtual Robot* clone();
+	/*
+	 * Clones Robot object
+	 */
+	virtual Robot* clone() const;
 };
 
 #endif	// ROBOT_H

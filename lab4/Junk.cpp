@@ -22,6 +22,4 @@ void Junk::doCrash() {}
 
 bool Junk::justCrashed() const { return false; }
 
-Robot* Junk::clone(){
-    return new Junk(*this);
-}
+Robot* Junk::clone() const { return new Junk(*this); }

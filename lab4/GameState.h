@@ -8,86 +8,86 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
+#include <QGraphicsScene>
 #include <string>
 #include <vector>
-#include <QGraphicsScene>
-#include "Unit.h"
-#include "Robot.h"
-#include "Junk.h"
+
 #include "Hero.h"
+#include "Junk.h"
+#include "Robot.h"
+#include "Unit.h"
 
 class GameState {
 public:
+	/*
+	 * Create a GameState with randomly placed, but not
+	 * overlapping hero and numberOfRobots robots
+	 */
+	explicit GameState(int numberOfRobots);
 
-    /*
-     * Create a GameState with randomly placed, but not
-     * overlapping hero and numberOfRobots robots
-     */
-    GameState(int numberOfRobots);
+	~GameState();
+	GameState(const GameState& gameState);
+	GameState& operator=(const GameState& other);
 
-    ~GameState();
-    GameState(const GameState& gameState);
-    GameState& operator=(GameState other);
-    
 
-    /*
-     * Clear and redraw entire playing field
-     */
-    void draw(QGraphicsScene* scene) const;	// Clear and redraw entire playing field
+	/*
+	 * Clear and redraw entire playing field
+	 */
+	void draw(
+		QGraphicsScene* scene) const;  // Clear and redraw entire playing field
 
-    /*
-     * Teleport hero to random location
-     */
-    void teleportHero();
+	/*
+	 * Teleport hero to random location
+	 */
+	void teleportHero();
 
-    /*
-     * Move robots one step towards hero
-     */
-    void moveRobots();
+	/*
+	 * Move robots one step towards hero
+	 */
+	void moveRobots();
 
-    /*
-     * Identify crashed robots
-     */
-    void updateCrashes();
+	/*
+	 * Identify crashed robots
+	 */
+	void updateCrashes();
 
-    /*
-     * Count identified crashed robots
-     */
-    int countJustCrashed()const;
+	/*
+	 * Count identified crashed robots
+	 */
+	int countJustCrashed() const;
 
-    /*
-     * Replace each identified crashed robot with a junk
-     */
-    void junkTheCrashed();
+	/*
+	 * Replace each identified crashed robot with a junk
+	 */
+	void junkTheCrashed();
 
-    /*
-     * Are there still robots that did not crash?
-     */
-    bool stillLiveRobots() const;
+	/*
+	 * Are there still robots that did not crash?
+	 */
+	bool stillLiveRobots() const;
 
-    /*
-     * Is hero in same place as robot or junk?
-     */
-    bool heroDead() const;
+	/*
+	 * Is hero in same place as robot or junk?
+	 */
+	bool heroDead() const;
 
-    /*
-     * Move hero towards dir
-     */
-    void moveHeroTowards (const Point& dir);
+	/*
+	 * Move hero towards dir
+	 */
+	void moveHeroTowards(const Point& dir);
 
-    /*
-     * Return hero
-     */
-    Point getHeroAsPoint () const;
+	/*
+	 * Return hero
+	 */
+	Point getHeroAsPoint() const;
 
 private:
-    std::vector<Robot*> robots;  // the robots
-    //std::vector<Junk> junks;    // robots that have turned to junk
-    Hero hero;                  // the hero
+	std::vector<Robot*> robots;	 // the robots
+	// std::vector<Junk> junks;    // robots that have turned to junk
+	Hero hero;	// the hero
 
-    // private helpers
-    bool isEmpty(const Unit& unit) const;
-
+	// private helpers
+	bool isEmpty(const Unit& unit) const;
 };
 
-#endif // GAMESTATE_H
+#endif	// GAMESTATE_H
