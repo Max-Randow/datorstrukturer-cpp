@@ -33,11 +33,15 @@ public:
 	 */
 	virtual bool justCrashed() const;
 
-
 	/*
 	 * Draws this robot onto the given QGraphicsScene.
 	 */
 	virtual void draw(QGraphicsScene* scene) const;
+
+    /*
+    * Clones a robot
+    */
+    virtual Robot* clone();
 };
 
 #endif	// ROBOT_H

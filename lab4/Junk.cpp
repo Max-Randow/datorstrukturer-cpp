@@ -21,3 +21,7 @@ bool Junk::canMove() const { return false; }
 void Junk::doCrash() {}
 
 bool Junk::justCrashed() const { return false; }
+
+Robot* Junk::clone(){
+    return new Junk(*this);
+}

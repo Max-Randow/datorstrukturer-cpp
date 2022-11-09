@@ -13,6 +13,9 @@ void Robot::doCrash() { crashed = true; }
 
 bool Robot::justCrashed() const { return crashed; }
 
+Robot* Robot::clone(){
+    return new Robot(*this);
+}
 void Robot::draw(QGraphicsScene* scene) const {
 	Point corner = asPoint();
 	scene->addEllipse(QRectF(corner.x * UNIT_WIDTH, corner.y * UNIT_HEIGHT,

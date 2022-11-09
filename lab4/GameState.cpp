@@ -32,6 +32,26 @@ GameState::~GameState() {
 	}
 }
 
+    GameState::GameState(const GameState& gameState){
+        for(unsigned i = 0; i < robots.size(); i++){
+            delete robots[i];
+            robots[i] = gameState.robots[i].clone();
+        }
+        hero = gameState.hero;
+        
+    }
+
+    GameState& GameState::operator=(GameState& other){
+        for(unsigned i = 0; i < robots.size(); i++){
+            delete robots[i];
+            robots[i] = other.robots[i].clone();
+        }
+        hero = other.hero;
+
+        return *this;
+
+    }
+
 void GameState::draw(QGraphicsScene* scene) const {
 	scene->clear();
 	hero.draw(scene);
