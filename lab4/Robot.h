@@ -15,37 +15,37 @@
 #include "Unit.h"
 
 class Robot : public Unit {
-    bool crashed = false;
+	bool crashed = false;
 
 public:
-    explicit Robot(const Point& p) : Unit(p) {}
+	explicit Robot(const Point& p) : Unit(p) {}
 
-    Robot() = default;
+	Robot() = default;
 
-    /*
-     * did not crash yet
-     */
-    virtual bool canMove() const;
+	/*
+	 * did not crash yet
+	 */
+	virtual bool canMove() const;
 
-    /*
-     * Crashes and remembers it
-     */
-    virtual void doCrash();
+	/*
+	 * Crashes and remembers it
+	 */
+	virtual void doCrash();
 
-    /*
-     * Return whether the robot crashed
-     */
-    virtual bool justCrashed() const;
+	/*
+	 * Return whether the robot crashed
+	 */
+	virtual bool justCrashed() const;
 
-    /*
-     * Draws this robot onto the given QGraphicsScene.
-     */
-    virtual void draw(QGraphicsScene* scene) const override;
+	/*
+	 * Draws this robot onto the given QGraphicsScene.
+	 */
+	virtual void draw(QGraphicsScene* scene) const override;
 
-    /*
-     * Clones Robot object
-     */
-    virtual Unit* clone() const;
+	/*
+	 * Clones Robot object
+	 */
+	virtual Robot* clone() const override;
 };
 
 #endif	// ROBOT_H

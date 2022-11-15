@@ -16,10 +16,11 @@
 
 class Hero : public Unit {
 public:
-    /*
-     * Draws this hero onto the given QGraphicsScene.
-     */
-    void draw(QGraphicsScene* scene) const override;
+	/*
+	 * Draws this hero onto the given QGraphicsScene.
+	 */
+	void draw(QGraphicsScene* scene) const override;
+	Hero* clone() const override;
 };
 
 #endif	// HERO_H
