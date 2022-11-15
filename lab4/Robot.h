@@ -45,7 +45,7 @@ public:
     /*
      * Clones Robot object
      */
-    virtual Robot* clone() const;
+    virtual Unit* clone() const;
 };
 
 #endif	// ROBOT_H

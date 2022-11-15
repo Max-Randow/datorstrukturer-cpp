@@ -47,7 +47,7 @@ public:
     /*
      * Take one step closer to u
      */
-    virtual void moveTowards(const Unit&);
+    virtual void moveTowards(const Point&);
 
 
     /*
@@ -63,7 +63,12 @@ public:
     /*
      * Draw object to scene
      */
-    virtual void draw(QGraphicsScene* scene) const;
+    virtual void draw(QGraphicsScene* scene) const = 0; 
+
+    /*
+    * Clones a Unit 
+    */
+    virtual Unit* clone() const = 0;
 
 private:
     int x;	// x position of this unit

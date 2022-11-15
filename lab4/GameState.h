@@ -29,8 +29,12 @@ public:
     explicit GameState(int numberOfRobots);
 
     ~GameState();
+    // Copy constuctor
     GameState(const GameState& gameState);
     GameState& operator=(const GameState& other);
+    // Move semantics
+    GameState(GameState&& gameState);
+    GameState& operator=(GameState&& other); 
 
 
     /*

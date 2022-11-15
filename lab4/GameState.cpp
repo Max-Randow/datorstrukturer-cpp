@@ -38,7 +38,7 @@ GameState::GameState(const GameState& gameState) {
     }
     hero = gameState.hero;
 }
-
+// Copy assignment
 GameState& GameState::operator=(const GameState& other) {
     for (Robot* robot : robots) {
         delete robot;
@@ -53,6 +53,27 @@ GameState& GameState::operator=(const GameState& other) {
 
     return *this;
 }
+GameState::GameState(GameState&& gameState){
+    robots = std::move(gameState.robots);
+    hero = std::move(gameState.hero);
+    gameState.robots.clear();
+
+}
+GameState& GameState::operator=(GameState&& other){
+    for (Robot* robot : robots) {
+        delete robot;
+    }
+
+    robots = std::move(other.robots);
+    hero = std::move(other.hero);
+    other.robots.clear();
+    //other.robots.shrink_to_fit();
+
+    return *this;
+    
+} 
+
+
 
 void GameState::draw(QGraphicsScene* scene) const {
     scene->clear();
@@ -126,7 +147,7 @@ bool GameState::heroDead() const {
 
 
 void GameState::moveHeroTowards(const Point& dir) {
-    hero.moveTowards(Unit(dir));
+    hero.moveTowards(dir);
 }
 
 Point GameState::getHeroAsPoint() const { return hero.asPoint(); }

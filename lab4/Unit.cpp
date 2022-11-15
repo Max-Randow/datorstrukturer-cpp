@@ -20,17 +20,17 @@ Point Unit::asPoint() const { return Point {x, y}; }
 bool Unit::at(const Unit& u) const { return (x == u.x && y == u.y); }
 
 
-void Unit::moveTowards(const Unit& u) {
-	if (x > u.x) {
+void Unit::moveTowards(const Point& p) {
+	if (x > p.x) {
 		x--;
 	}
-	if (x < u.x) {
+	if (x < p.x) {
 		x++;
 	}
-	if (y > u.y) {
+	if (y > p.y) {
 		y--;
 	}
-	if (y < u.y) {
+	if (y < p.y) {
 		y++;
 	}
 	checkBounds();
