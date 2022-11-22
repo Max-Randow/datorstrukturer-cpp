@@ -13,6 +13,8 @@
 #include "random.h"
 #include <vector>
 
+using namespace std;
+
 template <typename T>
 void shuffle(T* array, int length) {
     for (int i = 0; i < length; i++) {

@@ -9,7 +9,8 @@
 
 #include <iostream>
 #include <string>
-// TODO: include any other header files you need
+#include "cube.h"
+#include "grid.h"
 
 using namespace std;
 
@@ -21,7 +22,12 @@ public:
 
     // TODO: decide the public member functions and declare them
 
+    Grid<char> getBoard() const;
+    void initBoard(string cubes);
+    void initBoard();
+
 private:
+    Grid<char> board;
     // TODO: decide the private member variables/functions and declare them
 
 };

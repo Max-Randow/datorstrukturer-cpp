@@ -5,6 +5,7 @@
 // TODO: remove this comment header and replace it with your own
 
 #include <sstream>
+#include <iostream>
 #include "Boggle.h"
 #include "random.h"
 #include "shuffle.h"
@@ -20,3 +21,28 @@ static string CUBES[NUM_CUBES] = {        // the letters on all 6 sides of every
 };
 
 // TODO: implement the members you declared in Boggle.h
+
+Grid<char> Boggle::getBoard() const {
+    return board;
+}
+
+void Boggle::initBoard() {
+    board.resize(BOARD_SIZE, BOARD_SIZE);
+
+    for(int i = 0; i < BOARD_SIZE; i++) {
+        for(int j = 0; j < BOARD_SIZE; j++) {
+            board.set(i,j, CUBES[i*j][randomInteger(0,CUBE_SIDES)]);
+        }
+    }
+}
+
+void Boggle::initBoard(string cubes) {
+    board.resize(BOARD_SIZE, BOARD_SIZE);
+
+    for(int i = 0; i < BOARD_SIZE; i++) {
+        for(int j = 0; j < BOARD_SIZE; j++) {
+            board.set(i,j, cubes[i*j]);
+        }
+    }
+
+}
