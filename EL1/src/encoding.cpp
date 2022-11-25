@@ -9,6 +9,13 @@
 map<int, int> buildFrequencyTable(istream& input) {
     // TODO: implement this function
     map<int, int> freqTable;
+    char character = input.get();
+
+    while(!input.fail()) {
+        freqTable[static_cast<int>(character)]++;
+        character = input.get();
+    }
+    freqTable[PSEUDO_EOF] = 1;
     return freqTable;
 }
 
