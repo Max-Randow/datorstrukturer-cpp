@@ -6,8 +6,10 @@
 #include "encoding.h"
 // TODO: include any other headers you need
 
+/*
+ * Build huffman frequency table from stream input.
+ */
 map<int, int> buildFrequencyTable(istream& input) {
-    // TODO: implement this function
     map<int, int> freqTable;
     char character = input.get();
 
