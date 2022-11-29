@@ -7,10 +7,14 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <unordered_set>
 
 #include "Boggle.h"
 #include "bogglemain.h"
 #include "strlib.h"
+
+void drawBoggleBoard(Boggle const& board);
+void drawScore(Boggle const& board);
 
 bool isAlphaString(string const& config) {
 	return config.length() == 16 &&
@@ -49,6 +53,25 @@ void playOneGame(Boggle& boggle) {
 	if (!askCustomBoardConfig(boggle)) {
 		boggle.initBoard();
 	}
+	drawBoggleBoard(boggle);
+	drawScore(boggle);
+
+
+}
+void drawScore(Boggle const& boggle){
+	//int playerScore = boggle.getPlayerScore();
+	unordered_set<string> guessedWords = boggle.getGuessedWords();
+
+	cout<<"Your words(" << guessedWords.size() << "):\n";
+	cout<<"{"<<endl;
+	for(string word : guessedWords){
+		cout<<"\""<<word<<"\" \n";
+	}
+	cout<<"}"<<endl;
+	cout<<"Your Score: "<< guessedWords.size() <<endl;
+
+
+
 }
 
 void drawBoggleBoard(Boggle const& boggle) {

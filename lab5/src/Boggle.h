@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <string>
-
+#include <unordered_set>
 #include "grid.h"
 #include "lexicon.h"
 
@@ -20,7 +20,7 @@ public:
 	const string DICTIONARY_FILE = "EnglishWords.dat";
 	const int MIN_WORD_LENGTH	 = 4;
 	const int BOARD_SIZE		 = 4;
-
+ 
 	Boggle();
 
 	Grid<char> getBoard() const;
@@ -28,10 +28,15 @@ public:
 	void initBoard();
 	static int numCubes();
 	bool correctWordLength(const string& word) const;
-
+	int getPlayerScore() const;
+	int getAiScore() const;
+	unordered_set<string>const& getGuessedWords() const;
 private:
 	Grid<char> board;
 	Lexicon lexicon;
+	int playerScore 	= 0;
+	int aiScore			= 0;
+	unordered_set<string> guessedWords;	
 };
 
 #endif
