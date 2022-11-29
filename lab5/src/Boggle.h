@@ -9,27 +9,29 @@
 
 #include <iostream>
 #include <string>
-#include "cube.h"
+
 #include "grid.h"
+#include "lexicon.h"
 
 using namespace std;
 
 class Boggle {
 public:
-    const string DICTIONARY_FILE = "EnglishWords.dat";
-    const int MIN_WORD_LENGTH = 4;
-    const int BOARD_SIZE = 4;
+	const string DICTIONARY_FILE = "EnglishWords.dat";
+	const int MIN_WORD_LENGTH	 = 4;
+	const int BOARD_SIZE		 = 4;
 
-    // TODO: decide the public member functions and declare them
+	Boggle();
 
-    Grid<char> getBoard() const;
-    void initBoard(string cubes);
-    void initBoard();
+	Grid<char> getBoard() const;
+	void initBoard(string cubes);
+	void initBoard();
+	static int numCubes();
+	bool correctWordLength(const string& word) const;
 
 private:
-    Grid<char> board;
-    // TODO: decide the private member variables/functions and declare them
-
+	Grid<char> board;
+	Lexicon lexicon;
 };
 
 #endif

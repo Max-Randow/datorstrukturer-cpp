@@ -13,47 +13,52 @@
  * with an unmodified version of all provided code files.
  */
 
+#include "bogglemain.h"
+
 #include <fstream>
 #include <iostream>
 #include <string>
+
+#include "Boggle.h"
 #include "random.h"
 #include "strlib.h"
-#include "Boggle.h"
-#include "bogglemain.h"
 
 using namespace std;
 
 int main() {
-    intro();
+	intro();
 
-    // play games repeatedly until user decides to quit
-    Boggle boggle;
-    while (true) {
-        playOneGame(boggle);
-        cout << endl;
-        if (!yesOrNo("Play again (Y/N)? ")) {
-            break;
-        }
-    }
+	// play games repeatedly until user decides to quit
+	Boggle boggle;
+	while (true) {
+		playOneGame(boggle);
+		cout << endl;
+		if (!yesOrNo("Play again (Y/N)? ")) {
+			break;
+		}
+	}
 
-    cout << "Have a nice day." << endl;
-    return 0;
+	cout << "Have a nice day." << endl;
+	return 0;
 }
 
 /*
  * Explains the program to the user.
  */
 void intro() {
-    cout << "Welcome to TDDD86 Boggle!" << endl;
-    cout << "This game is a search for words on a 2-D board of letter cubes." << endl;
-    cout << "The good news is that you might improve your vocabulary a bit." << endl;
-    cout << "The bad news is that you're probably going to lose miserably to" << endl;
-    cout << "this little dictionary-toting hunk of silicon." << endl;
-    cout << "If only YOU had a gig of RAM!" << endl;
-    cout << endl;
-    cout << "Press Enter to begin the game ... ";
-    string line;
-    getline(cin, line);
+	cout << "Welcome to TDDD86 Boggle!" << endl;
+	cout << "This game is a search for words on a 2-D board of letter cubes."
+		 << endl;
+	cout << "The good news is that you might improve your vocabulary a bit."
+		 << endl;
+	cout << "The bad news is that you're probably going to lose miserably to"
+		 << endl;
+	cout << "this little dictionary-toting hunk of silicon." << endl;
+	cout << "If only YOU had a gig of RAM!" << endl;
+	cout << endl;
+	cout << "Press Enter to begin the game ... ";
+	string line;
+	getline(cin, line);
 }
 
 /*
@@ -62,18 +67,22 @@ void intro() {
  * false if the user types anything that starts with 'n', or re-prompts if
  * the user doesn't type a 'y' or 'n' word.
  */
-bool yesOrNo(string prompt) {
-    cout << prompt;
-    while (true) {
-        string answer;
-        getline(cin, answer);
-        answer = trim(toLowerCase(answer));
-        if (startsWith(answer, 'y')) {
-            return true;
-        } else if (startsWith(answer, 'n')) {
-            return false;
-        } else {
-            cout << "Please type a word that begins with 'y' or 'n'." << endl;
-        }
-    }
+bool yesOrNo(const string& prompt) {
+	cout << prompt;
+
+	while (true) {
+		string answer;
+		getline(cin, answer);
+		answer = trim(toLowerCase(answer));
+
+		if (startsWith(answer, 'y')) {
+			return true;
+		}
+
+		if (startsWith(answer, 'n')) {
+			return false;
+		}
+
+		cout << "Please type a word that begins with 'y' or 'n'.\n";
+	}
 }
