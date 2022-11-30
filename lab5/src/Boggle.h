@@ -8,6 +8,7 @@
 #define _boggle_h
 
 #include <iostream>
+#include <vector>
 #include <string>
 #include <unordered_set>
 #include "grid.h"
@@ -27,16 +28,21 @@ public:
 	void initBoard(string cubes);
 	void initBoard();
 	static int numCubes();
-	bool correctWordLength(const string& word) const;
+	bool validWord(const string& word) const;
 	int getPlayerScore() const;
 	int getAiScore() const;
 	unordered_set<string>const& getGuessedWords() const;
+	bool alreadyGuessedWord(string const& word) const;
+	bool findValidWord(string const& word) const;
+	vector<string> findAllRemainingWords() const; // Kanske inte const
+
 private:
 	Grid<char> board;
 	Lexicon lexicon;
 	int playerScore 	= 0;
 	int aiScore			= 0;
 	unordered_set<string> guessedWords;	
+	
 };
 
 #endif

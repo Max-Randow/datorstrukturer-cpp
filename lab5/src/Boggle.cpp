@@ -58,12 +58,17 @@ int Boggle::getAiScore() const {
 	return aiScore;
 }
 
+
 unordered_set<string>const& Boggle::getGuessedWords() const{
 	return guessedWords;
 }
 
 int Boggle::numCubes() const { return NUM_CUBES; }
 
-bool Boggle::correctWordLength(const string& word) const {
-	return word.length() >= static_cast<size_t>(MIN_WORD_LENGTH);
+bool Boggle::validWord(const string& word) const {
+	return word.length() >= static_cast<size_t>(MIN_WORD_LENGTH) && lexicon.contain(word);
+}
+
+bool Boggle::alreadyGuessedWord(const string &word) const {
+	return guessedWords.find(word) != guessedWords.end();
 }

@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
+#include <ostream>
 #include <sstream>
 #include <unordered_set>
 
@@ -53,8 +54,29 @@ void playOneGame(Boggle& boggle) {
 	if (!askCustomBoardConfig(boggle)) {
 		boggle.initBoard();
 	}
+
+	while (true) {
 	drawBoggleBoard(boggle);
 	drawScore(boggle);
+	string guess;
+	cout<<"Type a word (or press enter to end your turn): "<<endl;
+	cin>>guess;
+	if (guess.empty()) {
+		break;
+	}
+	else if (!boggle.validWord(guess)){
+		cout<<"Invalid Word, guess again"<<endl;
+
+	}
+	if (boggle.alreadyGuessedWord(guess)) {
+		cout<<"Word already guessed"<<endl;
+		
+	
+	}
+	
+
+	}
+
 
 
 }
