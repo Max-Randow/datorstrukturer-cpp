@@ -12,18 +12,41 @@
 
 #include "Boggle.h"
 #include "bogglemain.h"
-#include "strlib.h"
 
-void drawBoggleBoard(Boggle const& board);
-void drawScore(Boggle const& board);
+void drawBoggleBoard(Boggle const& boggle);
+void drawScore(Boggle const& boggle);
+bool isAlpha(string const& string);
+void toLower(string& string);
+bool useCustomBoardConfig(Boggle& boggle);
 
-bool isAlphaString(string const& config) {
-	return config.length() == 16 &&
-		   std::all_of(config.begin(), config.end(),
-					   [](unsigned char c) { return std::isalpha(c); });
+
+/*
+ * Plays one game of Boggle using the given boggle game state object.
+ */
+void playOneGame(Boggle& boggle) {
+	if (!useCustomBoardConfig(boggle)) {
+		boggle.initBoard();
+	}
+
+	while (true) {
+		drawBoggleBoard(boggle);
+		drawScore(boggle);
+		cout << "Type a word (or press enter to end your turn): \n";
+		string guess;
+		cin >> guess;
+
+		if (guess.empty()) {
+			break;
+		}
+		if (!boggle.validWord(guess)) {
+			cout << "Invalid Word, guess again\n";
+		} else if (boggle.alreadyGuessedWord(guess)) {
+			cout << "Word already guessed\n";
+		}
+	}
 }
 
-bool askCustomBoardConfig(Boggle& boggle) {
+bool useCustomBoardConfig(Boggle& boggle) {
 	if (!yesOrNo("Use custom configuration?")) {
 		return false;
 	}
@@ -31,69 +54,43 @@ bool askCustomBoardConfig(Boggle& boggle) {
 		cout << "Enter 16 characters to use:\n";
 		string config;
 		cin >> config;
-		if (config.length() == boggle.numCubes() && isAlphaString(config)) {
-			// Convert config string to lowercase.
-			std::transform(config.begin(), config.end(), config.begin(),
-						   [](unsigned char c) { return std::tolower(c); });
+
+		if (!(config.length() == Boggle::numCubes())) {
+			cout << "Custom configuration has to be " << Boggle::numCubes()
+				 << " characters\n";
+		} else if (!isAlpha(config)) {
+			cout << "Enter only alphanumeric characters\n";
+		} else {
+			toLower(config);
 			boggle.initBoard(config);
 			break;
 		}
-
-		cout << "Enter only alphanumeric characters\n";
 	}
 
 	return true;
 }
 
-/*
- * Plays one game of Boggle using the given boggle game state object.
- */
-void playOneGame(Boggle& boggle) {
-	// TODO: implement this function (and add any other functions you like to
-	// help you)
-	if (!askCustomBoardConfig(boggle)) {
-		boggle.initBoard();
-	}
-
-	while (true) {
-	drawBoggleBoard(boggle);
-	drawScore(boggle);
-	string guess;
-	cout<<"Type a word (or press enter to end your turn): "<<endl;
-	cin>>guess;
-	if (guess.empty()) {
-		break;
-	}
-	else if (!boggle.validWord(guess)){
-		cout<<"Invalid Word, guess again"<<endl;
-
-	}
-	if (boggle.alreadyGuessedWord(guess)) {
-		cout<<"Word already guessed"<<endl;
-		
-	
-	}
-	
-
-	}
-
-
-
+bool isAlpha(string const& string) {
+	return std::all_of(string.begin(), string.end(),
+					   [](unsigned char c) { return std::isalpha(c); });
 }
-void drawScore(Boggle const& boggle){
-	//int playerScore = boggle.getPlayerScore();
-	unordered_set<string> guessedWords = boggle.getGuessedWords();
 
-	cout<<"Your words(" << guessedWords.size() << "):\n";
-	cout<<"{"<<endl;
-	for(string word : guessedWords){
-		cout<<"\""<<word<<"\" \n";
+void toLower(string& string) {
+	std::transform(string.begin(), string.end(), string.begin(),
+				   [](unsigned char c) { return std::tolower(c); });
+}
+
+void drawScore(Boggle const& boggle) {
+	unordered_set<string> const& guessedWords = boggle.getGuessedWords();
+	int const playerScore					  = boggle.getPlayerScore();
+
+	cout << "Your words(" << guessedWords.size() << "):\n";
+	cout << "{" << endl;
+	for (string const& word : guessedWords) {
+		cout << word << " ";
 	}
-	cout<<"}"<<endl;
-	cout<<"Your Score: "<< guessedWords.size() <<endl;
-
-
-
+	cout << "}\n";
+	cout << "Your Score: " << playerScore << endl;
 }
 
 void drawBoggleBoard(Boggle const& boggle) {
