@@ -12,7 +12,6 @@
 
 #include "random.h"
 #include "shuffle.h"
-#include "strlib.h"
 
 static const int NUM_CUBES	   = 16;  // the number of cubes in the game
 static const int CUBE_SIDES	   = 6;	  // the number of sides on each cube
@@ -60,4 +59,20 @@ bool Boggle::validWord(const string& word) const {
 
 bool Boggle::alreadyGuessedWord(const string& word) const {
 	return guessedWords.find(word) != guessedWords.end();
+}
+
+void Boggle::updatePlayerScore(string const& word) {
+	playerScore += word.length() - 3;
+}
+
+bool Boggle::findValidWord(string const& word) const {}
+
+vector<string> Boggle::findAllRemainingWords() const {}
+
+vector<pair<int, int>> Boggle::getNeighbors(int const i, int const j) const {
+	vector<pair<int, int>> neighbors {};
+
+	// TODO: skriv kod.
+
+	return neighbors;
 }
