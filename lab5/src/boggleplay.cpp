@@ -42,6 +42,7 @@ void playOneGame(Boggle& boggle) {
 			cout << "Invalid Word, guess again\n";
 		} else if (boggle.alreadyGuessedWord(guess)) {
 			cout << "Word already guessed\n";
+		} else {
 		}
 	}
 }
