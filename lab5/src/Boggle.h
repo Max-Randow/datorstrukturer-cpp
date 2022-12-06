@@ -8,6 +8,7 @@
 #define _boggle_h
 
 #include <iostream>
+#include <set>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -25,7 +26,7 @@ public:
 
 	Boggle();
 
-	Grid<char> getBoard() const;
+	Grid<char> const& getBoard() const;
 	void initBoard(string cubes);
 	void initBoard();
 	static int numCubes();
@@ -34,12 +35,12 @@ public:
 	int getAiScore() const;
 	unordered_set<string> const& getGuessedWords() const;
 	bool alreadyGuessedWord(string const& word) const;
-	bool findValidWord(string const& word) const;
+	bool findGuess(string const& word);
 	vector<string> findAllRemainingWords() const;  // Kanske inte const
 	void updatePlayerScore(string const& word);
 	vector<pair<int, int>> getNeighbors(int const i, int const j) const;
-	
-	
+	bool backtrack(string word, int wordIndex, int i, int j);
+
 
 private:
 	Grid<char> board;
@@ -47,6 +48,9 @@ private:
 	int playerScore = 0;
 	int aiScore		= 0;
 	unordered_set<string> guessedWords;
+	set<pair<int, int>> visited;
+
+	bool alreadyVisited(pair<int, int> node) const;
 };
 
 #endif

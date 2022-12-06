@@ -24,7 +24,7 @@ Boggle::Boggle() : lexicon(DICTIONARY_FILE) {
 	board.resize(BOARD_SIZE, BOARD_SIZE);
 }
 
-Grid<char> Boggle::getBoard() const { return board; }
+Grid<char> const& Boggle::getBoard() const { return board; }
 int Boggle::getPlayerScore() const { return playerScore; }
 int Boggle::getAiScore() const { return aiScore; }
 int Boggle::numCubes() { return NUM_CUBES; }
@@ -32,8 +32,9 @@ int Boggle::numCubes() { return NUM_CUBES; }
 void Boggle::initBoard() {
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
-			board.set(i, j,
-					  CUBES[i * BOARD_SIZE + j][randomInteger(0, CUBE_SIDES)]);
+			board.set(
+				i, j,
+				CUBES[i * BOARD_SIZE + j][randomInteger(0, CUBE_SIDES - 1)]);
 		}
 	}
 	shuffle(board);
@@ -45,7 +46,6 @@ void Boggle::initBoard(string cubes) {
 			board.set(i, j, cubes[i * BOARD_SIZE + j]);
 		}
 	}
-	shuffle(board);
 }
 
 unordered_set<string> const& Boggle::getGuessedWords() const {
@@ -65,20 +65,64 @@ void Boggle::updatePlayerScore(string const& word) {
 	playerScore += word.length() - 3;
 }
 
-bool Boggle::findValidWord(string const& word) const {}
+bool Boggle::findGuess(string const& word) {
+	for (int i = 0; i < board.numRows(); i++) {
+		for (int j = 0; j < board.numCols(); j++) {
+			if (board[i][j] == backtrack(word, 1, i, j)) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+
+bool Boggle::backtrack(string word, int wordIndex, int i, int j) {
+	if (wordIndex == word.length()) {
+		return true;
+	}
+
+	auto node = make_pair(i, j);
+	visited.insert(node);
+	vector<pair<int, int>> neighbors = getNeighbors(i, j);
+
+	for (pair<int, int> const& neighbor : neighbors) {
+		if (alreadyVisited(neighbor)) {
+			continue;
+		}
+		int const x			 = neighbor.first;
+		int const y			 = neighbor.second;
+		char const character = board[y][x];
+
+		if (character == word[wordIndex]) {
+			if (backtrack(word, wordIndex + 1, x, y)) {
+				visited.erase(node);
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+
+bool Boggle::alreadyVisited(pair<int, int> node) const {
+	return visited.find(node) != visited.end();
+}
 
 vector<string> Boggle::findAllRemainingWords() const {}
-
-
 
 
 vector<pair<int, int>> Boggle::getNeighbors(int const i, int const j) const {
 	vector<pair<int, int>> neighbors {};
 
-	for(int a = -1; a<=1; ++a){
-		for(int b = -1; b<=1; ++b){
-			if(board.inBounds(a+i, b+j)){
-				neighbors.push_back(make_pair(i,j));
+	for (int a = -1; a <= 1; ++a) {
+		for (int b = -1; b <= 1; ++b) {
+			int const row = a + i;
+			int const col = b + j;
+			if (board.inBounds(row, col) && !(row == i && col == j)) {
+				neighbors.push_back(make_pair(row, col));
 			}
 		}
 	}

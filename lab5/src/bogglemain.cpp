@@ -25,6 +25,7 @@
 
 using namespace std;
 
+
 int main() {
 	intro();
 
@@ -67,7 +68,7 @@ void intro() {
  * false if the user types anything that starts with 'n', or re-prompts if
  * the user doesn't type a 'y' or 'n' word.
  */
-bool yesOrNo(const string& prompt) {
+bool yesOrNo(string const& prompt) {
 	cout << prompt;
 
 	while (true) {

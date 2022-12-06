@@ -9,13 +9,14 @@
 #ifndef _bogglemain_h
 #define _bogglemain_h
 
-#include "Boggle.h"
 #include <string>
+
+#include "Boggle.h"
 using namespace std;
 
 void intro();
 void playOneGame(Boggle& boggle);
-bool yesOrNo(string prompt);
+bool yesOrNo(string const& prompt);
 void clearConsole();
 
 #endif

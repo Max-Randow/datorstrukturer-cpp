@@ -43,6 +43,7 @@ void playOneGame(Boggle& boggle) {
 		} else if (boggle.alreadyGuessedWord(guess)) {
 			cout << "Word already guessed\n";
 		} else {
+			cout << "Guess found: " << boggle.findGuess(guess) << "\n\n";
 		}
 	}
 }
@@ -95,9 +96,9 @@ void drawScore(Boggle const& boggle) {
 }
 
 void drawBoggleBoard(Boggle const& boggle) {
-	Grid<char> board = boggle.getBoard();
+	Grid<char> const& board = boggle.getBoard();
 
-	for (int i = 0; i < board.nCols; i++) {
+	for (int i = 0; i < board.nRows; i++) {
 		for (int j = 0; j < board.nCols; j++) {
 			cout << board.get(i, j);
 		}
