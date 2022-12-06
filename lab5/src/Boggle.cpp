@@ -69,10 +69,18 @@ bool Boggle::findValidWord(string const& word) const {}
 
 vector<string> Boggle::findAllRemainingWords() const {}
 
+
+
+
 vector<pair<int, int>> Boggle::getNeighbors(int const i, int const j) const {
 	vector<pair<int, int>> neighbors {};
 
-	// TODO: skriv kod.
-
+	for(int a = -1; a<=1; ++a){
+		for(int b = -1; b<=1; ++b){
+			if(board.inBounds(a+i, b+j)){
+				neighbors.push_back(make_pair(i,j));
+			}
+		}
+	}
 	return neighbors;
 }

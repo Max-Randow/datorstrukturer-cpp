@@ -38,6 +38,8 @@ public:
 	vector<string> findAllRemainingWords() const;  // Kanske inte const
 	void updatePlayerScore(string const& word);
 	vector<pair<int, int>> getNeighbors(int const i, int const j) const;
+	
+	
 
 private:
 	Grid<char> board;
