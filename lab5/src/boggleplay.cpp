@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
+#include <iterator>
 #include <ostream>
 #include <sstream>
 #include <unordered_set>
@@ -46,6 +47,8 @@ void playOneGame(Boggle& boggle) {
 			cout << "Guess found: " << boggle.findGuess(guess) << "\n\n";
 		}
 	}
+	unordered_set<string> allRemainingWords = boggle.findAllRemainingWords();
+
 }
 
 bool useCustomBoardConfig(Boggle& boggle) {
@@ -70,6 +73,22 @@ bool useCustomBoardConfig(Boggle& boggle) {
 	}
 
 	return true;
+}
+
+void drawAiScore(unordered_set<string>const& foundWords){
+	int const aiScore = Boggle.getAiScore();
+
+	cout<<"It's my turn!!\n";
+	cout<<"My words ("<< foundWords.size() <<"):"<<endl;
+	cout << "{" << endl;
+	for (string const& word : foundWords) {
+		cout << word << " ";
+	}
+	cout<< "}\n";
+	cout<< "My Score: " << aiScore <<"\n";
+	cout<<"Ha ha ha, I destroyed you. Better luck next time, puny human!"<<endl;
+	
+
 }
 
 bool isAlpha(string const& string) {

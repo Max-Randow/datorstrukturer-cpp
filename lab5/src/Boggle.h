@@ -36,7 +36,8 @@ public:
 	unordered_set<string> const& getGuessedWords() const;
 	bool alreadyGuessedWord(string const& word) const;
 	bool findGuess(string const& word);
-	vector<string> findAllRemainingWords() const;  // Kanske inte const
+	unordered_set<string> findAllRemainingWords() const;  // Kanske inte const
+	void searchWords(string word, int i, int j, unordered_set<string>& foundWords);
 	void updatePlayerScore(string const& word);
 	vector<pair<int, int>> getNeighbors(int const i, int const j) const;
 	bool backtrack(string word, int wordIndex, int i, int j);

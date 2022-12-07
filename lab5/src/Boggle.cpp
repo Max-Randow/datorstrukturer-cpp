@@ -9,6 +9,7 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_set>
+#include <utility>
 
 #include "random.h"
 #include "shuffle.h"
@@ -111,7 +112,40 @@ bool Boggle::alreadyVisited(pair<int, int> node) const {
 	return visited.find(node) != visited.end();
 }
 
-vector<string> Boggle::findAllRemainingWords() const {}
+void Boggle::searchWords(string word, int i, int j, unordered_set<string>& foundWords){
+	auto node = make_pair(i, j);
+	visited.insert(node);
+	vector<pair<int, int>> neighbors = getNeighbors(i, j);
+
+	for(pair<int, int> const& neighbor: neighbors){
+		if (alreadyVisited(neighbor)) {
+			continue;
+		}
+		int const x			 = neighbor.first;
+		int const y			 = neighbor.second;
+		word += board[y][x];
+		
+		if(lexicon.contains(word) && guessedWords.find(word) != guessedWords.end()){
+			foundWords.insert(word);
+		}
+		if(lexicon.containsPrefix(word)){
+			searchWords(word, x, y, foundWords);
+			visited.erase(neighbor);
+		}
+		
+	}
+}
+
+
+unordered_set<string> Boggle::findAllRemainingWords() const {
+	unordered_set<string> foundWords{};
+	for (int i = 0; i < board.numRows(); i++) {
+		for (int j = 0; j < board.numCols(); j++) {
+			searchWords("", i, j, foundWords);
+		}
+	}
+	return foundWords;
+}
 
 
 vector<pair<int, int>> Boggle::getNeighbors(int const i, int const j) const {
