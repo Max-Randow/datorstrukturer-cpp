@@ -27,20 +27,18 @@ public:
 	Boggle();
 
 	Grid<char> const& getBoard() const;
-	void initBoard(string cubes);
+	void initBoard(string const& cubes);
 	void initBoard();
 	static int numCubes();
 	bool validWord(const string& word) const;
+	bool alreadyGuessedWord(string const& word) const;
+
 	int getPlayerScore() const;
 	int getAiScore() const;
+
 	unordered_set<string> const& getGuessedWords() const;
-	bool alreadyGuessedWord(string const& word) const;
 	bool findGuess(string const& word);
-	unordered_set<string> findAllRemainingWords() const;  // Kanske inte const
-	void searchWords(string word, int i, int j, unordered_set<string>& foundWords);
-	void updatePlayerScore(string const& word);
-	vector<pair<int, int>> getNeighbors(int const i, int const j) const;
-	bool backtrack(string word, int wordIndex, int i, int j);
+	unordered_set<string> findAllRemainingWords();
 
 
 private:
@@ -51,7 +49,16 @@ private:
 	unordered_set<string> guessedWords;
 	set<pair<int, int>> visited;
 
-	bool alreadyVisited(pair<int, int> node) const;
+	vector<pair<int, int>> getNeighbors(pair<int, int> const& node) const;
+	void searchRemainingWords(string const& word,
+							  pair<int, int> const& node,
+							  unordered_set<string>& foundWords);
+	bool searchWord(string const& word,
+					int wordIndex,
+					pair<int, int> const& node);
+	bool alreadyVisited(pair<int, int> const& node) const;
+	void updateAiScore(string const& word);
+	void updatePlayerScore(string const& word);
 };
 
 #endif

@@ -18,23 +18,27 @@ void drawBoggleBoard(Boggle const& boggle);
 void drawScore(Boggle const& boggle);
 bool isAlpha(string const& string);
 void toLower(string& string);
-bool useCustomBoardConfig(Boggle& boggle);
+string getCustomBoardConfig();
+void drawAiScore(Boggle const& boggle, unordered_set<string> const& foundWords);
 
 
 /*
  * Plays one game of Boggle using the given boggle game state object.
  */
 void playOneGame(Boggle& boggle) {
-	if (!useCustomBoardConfig(boggle)) {
+	if (yesOrNo("Use custom configuration?")) {
+		boggle.initBoard(getCustomBoardConfig());
+	} else {
 		boggle.initBoard();
 	}
 
 	while (true) {
 		drawBoggleBoard(boggle);
 		drawScore(boggle);
-		cout << "Type a word (or press enter to end your turn): \n";
+		cout << "Type a word (or press enter to end your turn): ";
 		string guess;
 		cin >> guess;
+		cout << endl;
 
 		if (guess.empty()) {
 			break;
@@ -47,48 +51,52 @@ void playOneGame(Boggle& boggle) {
 			cout << "Guess found: " << boggle.findGuess(guess) << "\n\n";
 		}
 	}
-	unordered_set<string> allRemainingWords = boggle.findAllRemainingWords();
+	unordered_set<string> const remainingWords = boggle.findAllRemainingWords();
+	drawAiScore(boggle, remainingWords);
 
+	int const playerScore = boggle.getPlayerScore();
+	int const aiScore	  = boggle.getAiScore();
+
+	if (playerScore < aiScore) {
+		cout << "Ha ha ha, I destroyed you. Better luck next time, puny "
+				"human!\n";
+	} else if (playerScore > aiScore) {
+		cout << "Oh.. you beat me? Impressive human.\n";
+	} else {
+		cout << "Somehow it's a tie!\n";
+	}
 }
 
-bool useCustomBoardConfig(Boggle& boggle) {
-	if (!yesOrNo("Use custom configuration?")) {
-		return false;
-	}
+string getCustomBoardConfig() {
+	string config;
 	while (true) {
 		cout << "Enter 16 characters to use:\n";
-		string config;
 		cin >> config;
 
-		if (!(config.length() == Boggle::numCubes())) {
+		if (config.length() != static_cast<size_t>(Boggle::numCubes())) {
 			cout << "Custom configuration has to be " << Boggle::numCubes()
 				 << " characters\n";
 		} else if (!isAlpha(config)) {
 			cout << "Enter only alphanumeric characters\n";
 		} else {
 			toLower(config);
-			boggle.initBoard(config);
 			break;
 		}
 	}
 
-	return true;
+	return config;
 }
 
-void drawAiScore(unordered_set<string>const& foundWords){
-	int const aiScore = Boggle.getAiScore();
-
-	cout<<"It's my turn!!\n";
-	cout<<"My words ("<< foundWords.size() <<"):"<<endl;
+void drawAiScore(Boggle const& boggle,
+				 unordered_set<string> const& foundWords) {
+	cout << "It's my turn!!\n";
+	cout << "My words (" << foundWords.size() << "):" << endl;
 	cout << "{" << endl;
 	for (string const& word : foundWords) {
 		cout << word << " ";
 	}
-	cout<< "}\n";
-	cout<< "My Score: " << aiScore <<"\n";
-	cout<<"Ha ha ha, I destroyed you. Better luck next time, puny human!"<<endl;
-	
-
+	cout << "}\n";
+	cout << "My Score: " << boggle.getAiScore() << "\n";
 }
 
 bool isAlpha(string const& string) {
