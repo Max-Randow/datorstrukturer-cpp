@@ -10,7 +10,6 @@
 #include <iostream>
 #include <set>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 #include "grid.h"
@@ -29,16 +28,18 @@ public:
 	Grid<char> const& getBoard() const;
 	void initBoard(string const& cubes);
 	void initBoard();
+	void resetGame();
 	static int numCubes();
-	bool validWord(const string& word) const;
+	bool existsWord(string const& word) const;
+	bool isMinimumWordLength(string const& word) const;
 	bool alreadyGuessedWord(string const& word) const;
 
 	int getPlayerScore() const;
 	int getAiScore() const;
 
-	unordered_set<string> const& getGuessedWords() const;
+	set<string> const& getGuessedWords() const;
 	bool findGuess(string const& word);
-	unordered_set<string> findAllRemainingWords();
+	set<string> findAllRemainingWords();
 
 
 private:
@@ -46,13 +47,13 @@ private:
 	Lexicon lexicon;
 	int playerScore = 0;
 	int aiScore		= 0;
-	unordered_set<string> guessedWords;
+	set<string> guessedWords;
 	set<pair<int, int>> visited;
 
 	vector<pair<int, int>> getNeighbors(pair<int, int> const& node) const;
 	void searchRemainingWords(string const& word,
 							  pair<int, int> const& node,
-							  unordered_set<string>& foundWords);
+							  set<string>& foundWords);
 	bool searchWord(string const& word,
 					int wordIndex,
 					pair<int, int> const& node);
