@@ -1,6 +1,8 @@
-// You will edit and turn in this CPP file.
-// Also remove these comments here and add your own.
-// TODO: remove this comment header and replace with your own
+/*
+ * Authors: wilmi895, maxra518
+ * Implements the interface code for the boggle game.
+ * Uses and interacts with boggle class to update and retrieve game state.
+ */
 
 #include <algorithm>
 #include <cstdlib>

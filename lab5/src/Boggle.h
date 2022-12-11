@@ -1,8 +1,8 @@
-// This is the .h file you will edit and turn in.
-// We have provided a minimal skeleton for you,
-// but you must finish it as described in the spec.
-// Also remove these comments here and add your own, as well as on the members.
-// TODO: remove this comment header and replace it with your own
+/*
+ * Authors: wilmi895, maxra518
+ * Contains the game logic for boggle.
+ * Implements interfacing methods to update and retrieve game state.
+ */
 
 #ifndef _boggle_h
 #define _boggle_h
