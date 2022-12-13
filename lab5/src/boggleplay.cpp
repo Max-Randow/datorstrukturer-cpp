@@ -17,7 +17,7 @@
 #include "bogglemain.h"
 
 void drawBoggleBoard(Boggle const& boggle);
-void drawScore(Boggle const& boggle);
+void drawPlayerScore(Boggle const& boggle);
 bool isAlpha(string const& string);
 void toUpper(string& string);
 string getCustomBoardConfig();
@@ -29,6 +29,8 @@ string quote(string const& text);
  * Plays one game of Boggle using the given boggle game state object.
  */
 void playOneGame(Boggle& boggle) {
+	clearConsole();
+
 	if (yesOrNo("Use custom configuration? (y/n): ")) {
 		boggle.initBoard(getCustomBoardConfig());
 
@@ -40,17 +42,17 @@ void playOneGame(Boggle& boggle) {
 
 	while (true) {
 		drawBoggleBoard(boggle);
-		drawScore(boggle);
+		drawPlayerScore(boggle);
 		cout << "Type a word (or press enter to end your turn): ";
 		string guess;
 		getline(cin, guess);
 		cout << endl;
-		clearConsole();
 
 		if (guess.empty()) {
 			break;
 		}
 
+		clearConsole();
 		toUpper(guess);
 
 		if (!boggle.isMinimumWordLength(guess)) {
@@ -76,14 +78,24 @@ void playOneGame(Boggle& boggle) {
 	boggle.resetGame();
 }
 
+/*
+ * Gets a custom board configuration from the player.
+ */
 string getCustomBoardConfig() {
 	string config;
 	size_t const requiredConfigLength = Boggle::numCubes();
 	config.reserve(requiredConfigLength);
 
+	/*
+	 * Configs for testing:
+	 * BANAAANALEAALEVA
+	 * TESTWORDAAAAAAAA
+	 */
+
 	while (true) {
-		cout << "Enter " << requiredConfigLength << " characters to use:\n";
-		cin >> config;
+		cout << "Enter " << requiredConfigLength << " characters to use: ";
+		getline(cin, config);
+		cout << endl;
 
 		if (config.length() != requiredConfigLength) {
 			cout << "Custom configuration has to be " << Boggle::numCubes()
@@ -101,6 +113,9 @@ string getCustomBoardConfig() {
 	return config;
 }
 
+/*
+ * Draws the game result depending on the scores in boggle.
+ */
 void drawGameResults(Boggle const& boggle) {
 	int const playerScore = boggle.getPlayerScore();
 	int const aiScore	  = boggle.getAiScore();
@@ -117,6 +132,9 @@ void drawGameResults(Boggle const& boggle) {
 	}
 }
 
+/*
+ * Draws the ai turns result after playing.
+ */
 void drawAiScore(Boggle const& boggle, set<string> const& foundWords) {
 	cout << "It's my turn!!\n";
 	cout << "My words (" << foundWords.size() << "):\n";
@@ -130,17 +148,26 @@ void drawAiScore(Boggle const& boggle, set<string> const& foundWords) {
 	cout << "My Score: " << boggle.getAiScore() << '\n';
 }
 
+/*
+ * Checks if a string only contains alphabetic letters.
+ */
 bool isAlpha(string const& string) {
 	return std::all_of(string.begin(), string.end(),
 					   [](unsigned char const c) { return std::isalpha(c); });
 }
 
+/*
+ * Converts a string to uppercase.
+ */
 void toUpper(string& string) {
 	std::transform(string.begin(), string.end(), string.begin(),
 				   [](unsigned char const c) { return std::toupper(c); });
 }
 
-void drawScore(Boggle const& boggle) {
+/*
+ * Draws the players current game result.
+ */
+void drawPlayerScore(Boggle const& boggle) {
 	set<string> const& guessedWords = boggle.getGuessedWords();
 	int const playerScore			= boggle.getPlayerScore();
 
@@ -155,6 +182,9 @@ void drawScore(Boggle const& boggle) {
 	cout << "Your Score: " << playerScore << endl;
 }
 
+/*
+ * Draws the boggle board.
+ */
 void drawBoggleBoard(Boggle const& boggle) {
 	Grid<char> const& board = boggle.getBoard();
 
@@ -167,6 +197,9 @@ void drawBoggleBoard(Boggle const& boggle) {
 	cout << '\n';
 }
 
+/*
+ * Puts quotes around a string.
+ */
 string quote(string const& text) { return "\"" + text + "\""; }
 
 /*

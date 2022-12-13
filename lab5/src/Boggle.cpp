@@ -183,6 +183,7 @@ bool Boggle::searchWord(string const& word,
 void Boggle::searchRemainingWords(string const& word,
 								  pair<int, int> const& startNode,
 								  set<string>& foundWords) {
+	visited.insert(startNode);
 	vector<pair<int, int>> const neighbors = getNeighbors(startNode);
 
 	for (pair<int, int> const& neighbor : neighbors) {
@@ -197,18 +198,19 @@ void Boggle::searchRemainingWords(string const& word,
 		// not already be found by the computer (palidromes or multiple words),
 		// and the word has to exist.
 		if (isMinimumWordLength(new_word) && !alreadyGuessedWord(new_word) &&
-			foundWords.find(new_word) == foundWords.end() && existsWord(word)) {
+			(foundWords.find(new_word) == foundWords.cend()) &&
+			existsWord(word)) {
 			updateAiScore(new_word);
 			foundWords.insert(new_word);
+			// AASA
 		}
 		// The current word could be a prefix to another word, search further.
 		// Even though it could also be an existing word which gives points.
 		if (lexicon.containsPrefix(new_word)) {
-			visited.insert(startNode);
-			searchRemainingWords(new_word, startNode, foundWords);
-			visited.erase(startNode);
+			searchRemainingWords(new_word, neighbor, foundWords);
 		}
 	}
+	visited.erase(startNode);
 }
 
 /*
