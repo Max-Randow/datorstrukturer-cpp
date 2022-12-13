@@ -199,10 +199,9 @@ void Boggle::searchRemainingWords(string const& word,
 		// and the word has to exist.
 		if (isMinimumWordLength(new_word) && !alreadyGuessedWord(new_word) &&
 			(foundWords.find(new_word) == foundWords.cend()) &&
-			existsWord(word)) {
+			existsWord(new_word)) {
 			updateAiScore(new_word);
 			foundWords.insert(new_word);
-			// AASA
 		}
 		// The current word could be a prefix to another word, search further.
 		// Even though it could also be an existing word which gives points.
