@@ -81,3 +81,6 @@ POST_TARGETDEPS += copyResources
 macx {
 	cache()
 }
+
+DISTFILES += \
+	res/test.txt

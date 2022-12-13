@@ -1,4 +1,4 @@
-// This is the CPP file you will edit and turn in.
+﻿// This is the CPP file you will edit and turn in.
 // Also remove these comments here and add your own, along with
 // comments on every function and on complex code sections.
 // TODO: remove this comment header
@@ -6,6 +6,8 @@
 #include "encoding.h"
 
 #include <queue>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -68,15 +70,17 @@ map<int, string> buildEncodingMap(HuffmanNode* encodingTree) {
 	return encodingMap;
 }
 
+int asciiToDecimal(char const ascii) { return ascii - '0'; }
+
 void writeBits(string const& input, obitstream& output) {
 	for (char const bit : input) {
-		// Convert letter to ascii.
-		output.writeBit(bit - '0');
+		// Convert ascii to decimal
+		output.writeBit(asciiToDecimal(bit));
 	}
 }
 
 void encodeData(istream& input,
-				const map<int, string>& encodingMap,
+				map<int, string> const& encodingMap,
 				obitstream& output) {
 	int character = input.get();
 
@@ -89,19 +93,92 @@ void encodeData(istream& input,
 }
 
 void decodeData(ibitstream& input, HuffmanNode* encodingTree, ostream& output) {
-	// Läs bitar från input och traversera trädet för att hitta bokstäverna.
-	// Dvs anta att träd parametern är redan återskapad från filen.
+	HuffmanNode const* current_node = encodingTree;
+
+	bool bit = static_cast<bool>(input.readBit());
+
+	while (!input.fail()) {
+		if (current_node->isLeaf()) {
+			int const character = current_node->character;
+
+			if (character == PSEUDO_EOF) {
+				break;
+			}
+			output.put(static_cast<char>(character));
+			current_node = encodingTree;
+
+		} else {
+			current_node = bit ? current_node->one : current_node->zero;
+			bit			 = static_cast<bool>(input.readBit());
+		}
+	}
+}
+
+void writeHeader(obitstream& output, map<int, int> const& frequencyTable) {
+	stringstream header;
+	header << '{';
+
+	for (pair<int, int> const frequency : frequencyTable) {
+		header << frequency.first << ':' << frequency.second << ',';
+	}
+	// Overwrite last ','
+	header.seekp(-1, stringstream::cur);
+	header << '}';
+
+	output.write(header.str().c_str(), header.tellp());
 }
 
 void compress(istream& input, obitstream& output) {
-	// TODO: implement this function
+	map<int, int> const frequencyTable = buildFrequencyTable(input);
+	HuffmanNode* const encodingTree	   = buildEncodingTree(frequencyTable);
+	map<int, string> const encodingMap = buildEncodingMap(encodingTree);
+	freeTree(encodingTree);
+
+	writeHeader(output, frequencyTable);
+	input.clear();
+	input.seekg(0, ios::beg);
+	encodeData(input, encodingMap, output);
+}
+
+map<int, int> readHeader(ibitstream& input) {
+	map<int, int> frequencyTable {};
+	string character;
+	string frequency;
+	int byte = input.get();
+
+	while (!input.fail() && byte != '}') {
+		byte = input.get();
+
+		while (!input.fail() && byte != ':') {
+			character += to_string(asciiToDecimal(byte));
+			byte = input.get();
+		}
+
+		byte = input.get();
+		while (!input.fail() && byte != ',' && byte != '}') {
+			frequency += to_string(asciiToDecimal(byte));
+			byte = input.get();
+		}
+
+		frequencyTable[stoi(character)] = stoi(frequency);
+		character.clear();
+		frequency.clear();
+	}
+
+	return frequencyTable;
 }
 
 void decompress(ibitstream& input, ostream& output) {
-	// TODO: implement this function
+	map<int, int> frequencyTable	= readHeader(input);
+	HuffmanNode* const encodingTree = buildEncodingTree(frequencyTable);
+	decodeData(input, encodingTree, output);
+	freeTree(encodingTree);
 }
 
 void freeTree(HuffmanNode* node) {
+	if (node == nullptr) {
+		return;
+	}
 	if (!node->isLeaf()) {
 		freeTree(node->zero);
 		freeTree(node->one);
