@@ -3,7 +3,7 @@ QT += widgets
 # Used to turn off warnings for qt headers.
 QMAKE_CXXFLAGS += -isystem $$[QT_INSTALL_HEADERS]
 
-QMAKE_CXXFLAGS += -std=c++11 -m64 -pipe -fstack-clash-protection -fstack-protector-strong
+QMAKE_CXXFLAGS += -std=c++17 -m64 -pipe -fstack-clash-protection -fstack-protector-strong
 
 # Warnings
 QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wunused -Wold-style-cast -Woverloaded-virtual -Wnull-dereference
@@ -28,31 +28,31 @@ INCLUDEPATH += $$PWD/lib/
 
 # Copies the given files to the destination directory
 defineTest(copyToDestdir) {
-    files = $$1
+	files = $$1
 
-    for(FILE, files) {
-        DDIR = $$OUT_PWD
+	for(FILE, files) {
+		DDIR = $$OUT_PWD
 
-        # Replace slashes in paths with backslashes for Windows
-        win32:FILE ~= s,/,\\,g
-        win32:DDIR ~= s,/,\\,g
+		# Replace slashes in paths with backslashes for Windows
+		win32:FILE ~= s,/,\\,g
+		win32:DDIR ~= s,/,\\,g
 
-        !win32 {
-            QMAKE_POST_LINK += cp -r '"'$$FILE'"' '"'$$DDIR'"' $$escape_expand(\\n\\t)
-        }
-        win32 {
-            QMAKE_POST_LINK += xcopy '"'$$FILE'"' '"'$$DDIR'"' /e /y $$escape_expand(\\n\\t)
-        }
-    }
+		!win32 {
+			QMAKE_POST_LINK += cp -r '"'$$FILE'"' '"'$$DDIR'"' $$escape_expand(\\n\\t)
+		}
+		win32 {
+			QMAKE_POST_LINK += xcopy '"'$$FILE'"' '"'$$DDIR'"' /e /y $$escape_expand(\\n\\t)
+		}
+	}
 
-    export(QMAKE_POST_LINK)
+	export(QMAKE_POST_LINK)
 }
 !win32 {
-    copyToDestdir($$files($$PWD/res/*))
+	copyToDestdir($$files($$PWD/res/*))
 }
 win32 {
-    copyToDestdir($$PWD/res)
+	copyToDestdir($$PWD/res)
 }
 macx {
-    cache()
+	cache()
 }
