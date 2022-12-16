@@ -1,7 +1,8 @@
 /*
- * TDDD86 Pattern Recognition
- * This program computes and plots all line segments involving 4 points
- * in a file using Qt.
+ * Authors: wilmi895 maxra518
+ * Finds 2D points on the same line and renders the points and
+ * lines to a scene. Occurs in O(N^2*log(N)).
+ *
  */
 
 #include <QApplication>
@@ -57,8 +58,8 @@ int main(int argc, char* argv[]) {
 	input.close();
 
 	// setup graphical window
-	QGraphicsView* view	  = new QGraphicsView();
-	QGraphicsScene* scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
+	auto* view	= new QGraphicsView();
+	auto* scene = new QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
 	view->setScene(scene);
 	// draw points to screen all at once
 	render_points(scene, points);
