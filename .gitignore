@@ -1,5 +1,4 @@
 build-*
-*.txt
 *.ans
 *.o
 *.pro.user
