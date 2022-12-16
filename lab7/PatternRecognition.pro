@@ -19,10 +19,8 @@ QMAKE_CXXFLAGS_RELEASE += -D NDEBUG -O3 -march=native -flto
 
 QMAKE_LFLAGS += -m64
 
-SOURCES = $$PWD/src/*.cpp
-#SOURCES += $$PWD/lib/*.cpp
-HEADERS = $$PWD/src/*.h
-#HEADERS += $$PWD/lib/*.h
+SOURCES = src/fast.cpp src/Point.cpp
+HEADERS = src/Point.h
 
 INCLUDEPATH += $$PWD/lib/
 
@@ -56,3 +54,5 @@ win32 {
 macx {
 	cache()
 }
+
+DISTFILES +=
