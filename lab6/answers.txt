@@ -1,0 +1,24 @@
+1:
+eventQueue andvänds i,
+
+Simulation::run:
+Kör simulationen. Plockar ut nästan event från queue och
+bearbetar nästa event annars om SIMULATION_HORIZON är uppnådd
+så kastar den bort events i queue.
+
+Simulation::scheduleEvent
+Lägger till en ny event i eventQueue.
+
+allThefish andvänds i,
+Simulation::harvestTonnageNow
+Gör en harvest, dvs tar ut alla levande fiskar och "fångar" alla
+som är tillräckligt stora. Samtidigt minskar den populationen av
+alla vuxna och juvenile fiskar. Sist lägger den tillbaks alla
+fiskar som inte blev fångade i allTheFish.
+
+Simulation::addFish
+Lägger till en fisk i allTheFish.
+
+2:
+
+3:

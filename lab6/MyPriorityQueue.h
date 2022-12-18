@@ -7,75 +7,76 @@
 #ifndef MY_PRIORITY_QUEUE_H
 #define MY_PRIORITY_QUEUE_H
 
-#include "MyVector.h"
 #include "MyException.h"
+#include "MyVector.h"
 
 
-template <typename T, typename C>
-class MyPriorityQueue
-{
-    MyVector<T> vector_array;
-    C strictly_larger_operator;
+template<typename T, typename C>
+class MyPriorityQueue {
+	MyVector<T> vector_array;
+	C strictly_larger_operator;
 
 public:
-    MyPriorityQueue();
+	MyPriorityQueue();
 
-    ~MyPriorityQueue();
+	~MyPriorityQueue();
 
-    void push(const T& t);
+	void push(const T& t);
 
-    T top()const;
+	T top() const;
 
-    void pop();
+	void pop();
 
-    bool empty()const;
+	bool empty() const;
 
-  unsigned size() const;
+	unsigned size() const;
 
 private:
-    // Other private members?
+	// Other private members?
 };
 
-template <typename T, typename C>
-MyPriorityQueue<T,C>::MyPriorityQueue(){
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+template<typename T, typename C>
+MyPriorityQueue<T, C>::MyPriorityQueue() {
+	// TODO: replace the code below with your code for this member
+	MYEXCEPTION("unimplemented method");
 }
 
-template <typename T, typename C>
-MyPriorityQueue<T,C>::~MyPriorityQueue(){
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+template<typename T, typename C>
+MyPriorityQueue<T, C>::~MyPriorityQueue() {
+	// TODO: replace the code below with your code for this member
+	MYEXCEPTION("unimplemented method");
 }
 
-template <typename T, typename C>
-void MyPriorityQueue<T,C>::push(const T& t){
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+template<typename T, typename C>
+void MyPriorityQueue<T, C>::push(const T& t) {
+	// TODO: replace the code below with your code for this member
+	MYEXCEPTION("unimplemented method");
 }
 
-template <typename T, typename C>
-T MyPriorityQueue<T,C>::top()const{
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+template<typename T, typename C>
+T MyPriorityQueue<T, C>::top() const {
+	// TODO: replace the code below with your code for this member
+	MYEXCEPTION("unimplemented method");
 }
 
-template <typename T, typename C>
-void MyPriorityQueue<T,C>::pop(){
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+template<typename T, typename C>
+void MyPriorityQueue<T, C>::pop() {
+	// TODO: replace the code below with your code for this member
+	MYEXCEPTION("unimplemented method");
 }
 
-template <typename T, typename C>
-bool MyPriorityQueue<T,C>::empty()const{
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+template<typename T, typename C>
+bool MyPriorityQueue<T, C>::empty() const {
+	// TODO: replace the code below with your code for this member
+	MYEXCEPTION("unimplemented method");
+	return true;
 }
 
-template <typename T, typename C>
-unsigned MyPriorityQueue<T,C>::size()const{
-    // TODO: replace the code below with your code for this member
-    MYEXCEPTION("unimplemented method");
+template<typename T, typename C>
+unsigned MyPriorityQueue<T, C>::size() const {
+	// TODO: replace the code below with your code for this member
+	MYEXCEPTION("unimplemented method");
+	return 0;
 }
 
-#endif // MY_PRIORITY_QUEUE_H
+#endif	// MY_PRIORITY_QUEUE_H
