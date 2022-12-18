@@ -22,6 +22,6 @@ Lägger till en fisk i allTheFish.
 2:
 (83000, 450)
 (55000, 250)
-()
+(90000, 500)
 
 3:
