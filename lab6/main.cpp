@@ -48,7 +48,7 @@ int main()
 void show(){
     ofstream driver;
     driver.open("output.driver", ofstream::out);
-    driver << "set terminal wxt size 410,250 enhanced font 'Verdana,9' persist\n"
+    driver << "set terminal wxt size 800,600 enhanced font 'Verdana,9' persist\n"
            << "set style line 11 lc rgb '#808080' lt 1\n"
            << "set border 3 back ls 11\n"
            << "set tics nomirror \n"

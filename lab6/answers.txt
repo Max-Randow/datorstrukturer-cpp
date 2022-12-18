@@ -1,4 +1,4 @@
-1:
+	1:
 eventQueue andvänds i,
 
 Simulation::run:
@@ -20,5 +20,8 @@ Simulation::addFish
 Lägger till en fisk i allTheFish.
 
 2:
+(83000, 450)
+(55000, 250)
+()
 
 3:
