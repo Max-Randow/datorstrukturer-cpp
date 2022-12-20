@@ -33,50 +33,97 @@ public:
 
 private:
 	// Other private members?
-};
+	MyVector<T> heap;
+	void shiftUp(int index);
+	void shiftDown(int index);
+	void swap(int i, int j);
+	
+};	
 
 template<typename T, typename C>
 MyPriorityQueue<T, C>::MyPriorityQueue() {
-	// TODO: replace the code below with your code for this member
-	MYEXCEPTION("unimplemented method");
+	
 }
 
 template<typename T, typename C>
 MyPriorityQueue<T, C>::~MyPriorityQueue() {
-	// TODO: replace the code below with your code for this member
-	MYEXCEPTION("unimplemented method");
+
+}
+
+template<typename T, typename C>
+void MyPriorityQueue<T, C>::shiftDown(int index){
+	if(index < 0){
+		return;
+	}
+
+	int leftChild = 2*index +1;
+	int rightChild = 2*index +2;
+
+	if(!(leftChild > heap.size()) || !(rightChild > heap.size())){
+		if(strictly_larger_operator(heap[rightChild], heap[leftChild])){
+			swap(leftChild,index);
+			shiftDown(leftChild);
+		}
+		else if(strictly_larger_operator(heap[leftChild], heap[rightChild])){
+			swap(rightChild,index);
+			shiftDown(rightChild);
+		}
+
+	}
+	return;
+}
+template<typename T, typename C>
+void MyPriorityQueue<T, C>::swap(int i, int j){
+		T temp = heap[i];
+		heap[i] = heap[j];
+		heap[j] = temp;
+}
+
+template<typename T, typename C>
+void MyPriorityQueue<T, C>::shiftUp(int index){
+	if(index < 0){
+		return;
+	}
+	//Grab parent position in heap
+	int parentPos = (index-1)/2;
+
+	//Look at parent priority
+	if(strictly_larger_operator(heap[parentPos], heap[index])){
+		//Parent is lower priority than index, swap and 
+		swap(parentPos, index);
+		shiftUp(parentPos);
+	}
+
 }
 
 template<typename T, typename C>
 void MyPriorityQueue<T, C>::push(const T& t) {
-	// TODO: replace the code below with your code for this member
-	MYEXCEPTION("unimplemented method");
+	heap.push_back(t);
+	shiftUp(size() - 1);
+
+
 }
 
 template<typename T, typename C>
 T MyPriorityQueue<T, C>::top() const {
-	// TODO: replace the code below with your code for this member
-	MYEXCEPTION("unimplemented method");
+	return heap[0];
 }
 
 template<typename T, typename C>
 void MyPriorityQueue<T, C>::pop() {
-	// TODO: replace the code below with your code for this member
-	MYEXCEPTION("unimplemented method");
+	heap[0] = heap[heap.numberOfElements - 1];
+	heap.pop_back();
+
 }
 
 template<typename T, typename C>
 bool MyPriorityQueue<T, C>::empty() const {
-	// TODO: replace the code below with your code for this member
-	MYEXCEPTION("unimplemented method");
-	return true;
+	return heap.empty();
 }
 
 template<typename T, typename C>
 unsigned MyPriorityQueue<T, C>::size() const {
-	// TODO: replace the code below with your code for this member
-	MYEXCEPTION("unimplemented method");
-	return 0;
+	return heap.size();
 }
 
 #endif	// MY_PRIORITY_QUEUE_H

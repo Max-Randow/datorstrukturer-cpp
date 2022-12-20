@@ -73,7 +73,7 @@ void MyVector<T>::reserve(unsigned size){
 
 	}
 
-	unsigned nextPow2 = pow(2, ceil(log(size)/log(2)));
+	unsigned nextPow2 = pow(2, ceil(log(size)/log(2))); // nextPow2 *=2 ?
 	T* temp = new T[nextPow2];
 	copy(begin(), end(), temp);
 	delete [] storage;
