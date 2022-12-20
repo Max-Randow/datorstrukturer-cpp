@@ -40,18 +40,15 @@ public:
 
 
 private:
-//  MyPriorityQueue<Event*, EventComparator> eventQueue;
+  MyPriorityQueue<Event*, EventComparator> eventQueue;
 
-  std::priority_queue<Event*,
-                      vector<Event *, allocator<Event*> >,
-                      EventComparator> eventQueue;
+  //std::priority_queue<Event*,vector<Event *, allocator<Event*> >,EventComparator> eventQueue;
 
-//  MyVector<Fish*> allTheFish;
-  std::vector<Fish*> allTheFish;
+  MyVector<Fish*> allTheFish;
+  //std::vector<Fish*> allTheFish;
 
 
   unsigned simulationTime;
-
   unsigned eggPopulation;
   unsigned juvenilePopulation;
   unsigned adultPopulation;

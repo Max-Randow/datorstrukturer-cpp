@@ -13,117 +13,107 @@
 
 template<typename T, typename C>
 class MyPriorityQueue {
-	MyVector<T> vector_array;
-	C strictly_larger_operator;
-
 public:
-	MyPriorityQueue();
+    MyPriorityQueue() {};
 
-	~MyPriorityQueue();
+    ~MyPriorityQueue() {};
 
-	void push(const T& t);
+    void push(const T& t);
 
-	T top() const;
+    T top() const;
 
-	void pop();
+    void pop();
 
-	bool empty() const;
+    bool empty() const;
 
-	unsigned size() const;
+    unsigned size() const;
 
 private:
-	// Other private members?
-	MyVector<T> heap;
-	void shiftUp(int index);
-	void shiftDown(int index);
-	void swap(int i, int j);
-	
-};	
+    C strictly_larger_operator;
+    MyVector<T> heap;
+    void shiftUp(int index);
+    void shiftDown(int index);
+    void swap(int i, int j);
+    bool isLeaf(unsigned index) const;
+
+};
 
 template<typename T, typename C>
-MyPriorityQueue<T, C>::MyPriorityQueue() {
-	
-}
-
-template<typename T, typename C>
-MyPriorityQueue<T, C>::~MyPriorityQueue() {
-
+bool MyPriorityQueue<T, C>::isLeaf(unsigned const index) const {
+    unsigned const heapSize = size();
+    return (index >= heapSize/2) && (index < heapSize);
 }
 
 template<typename T, typename C>
 void MyPriorityQueue<T, C>::shiftDown(int index){
-	if(index < 0){
-		return;
-	}
+    if(isLeaf(index) || index < 0){
+        return;
+    }
 
-	int leftChild = 2*index +1;
-	int rightChild = 2*index +2;
+    int const leftChild = 2*index +1;
+    int const rightChild = 2*index +2;
+    int swapIndex = leftChild;
 
-	if(!(leftChild > heap.size()) || !(rightChild > heap.size())){
-		if(strictly_larger_operator(heap[rightChild], heap[leftChild])){
-			swap(leftChild,index);
-			shiftDown(leftChild);
-		}
-		else if(strictly_larger_operator(heap[leftChild], heap[rightChild])){
-			swap(rightChild,index);
-			shiftDown(rightChild);
-		}
+    // pick swapIndex to be the smallest of left and rightchild
+    if(strictly_larger_operator(heap[swapIndex], heap[rightChild])) {
+        swapIndex = rightChild;
+    }
 
-	}
-	return;
+    if(strictly_larger_operator(heap[index], heap[swapIndex])){
+        swap(index,swapIndex);
+        shiftDown(swapIndex);
+    }
+    return;
 }
 template<typename T, typename C>
-void MyPriorityQueue<T, C>::swap(int i, int j){
-		T temp = heap[i];
-		heap[i] = heap[j];
-		heap[j] = temp;
+void MyPriorityQueue<T, C>::swap(int const i, int const j){
+    T const temp = heap[i];
+    heap[i] = heap[j];
+    heap[j] = temp;
 }
 
 template<typename T, typename C>
-void MyPriorityQueue<T, C>::shiftUp(int index){
-	if(index < 0){
-		return;
-	}
-	//Grab parent position in heap
-	int parentPos = (index-1)/2;
+void MyPriorityQueue<T, C>::shiftUp(int const index){
+    if(index < 0){
+        return;
+    }
+    //Grab parent position in heap.
+    int const parentPos = (index-1)/2;
 
-	//Look at parent priority
-	if(strictly_larger_operator(heap[parentPos], heap[index])){
-		//Parent is lower priority than index, swap and 
-		swap(parentPos, index);
-		shiftUp(parentPos);
-	}
-
+    //Look at parent priority
+    if(strictly_larger_operator(heap[parentPos], heap[index])){
+        //Parent is lower priority than index, swap and
+        swap(parentPos, index);
+        shiftUp(parentPos);
+    }
 }
 
 template<typename T, typename C>
 void MyPriorityQueue<T, C>::push(const T& t) {
-	heap.push_back(t);
-	shiftUp(size() - 1);
-
-
+    heap.push_back(t);
+    shiftUp(size() - 1);
 }
 
 template<typename T, typename C>
 T MyPriorityQueue<T, C>::top() const {
-	return heap[0];
+    return heap[0];
 }
 
 template<typename T, typename C>
 void MyPriorityQueue<T, C>::pop() {
-	heap[0] = heap[heap.numberOfElements - 1];
-	heap.pop_back();
-
+    heap[0] = heap[heap.size() - 1];
+    heap.pop_back();
+    shiftDown(0);
 }
 
 template<typename T, typename C>
 bool MyPriorityQueue<T, C>::empty() const {
-	return heap.empty();
+    return heap.empty();
 }
 
 template<typename T, typename C>
 unsigned MyPriorityQueue<T, C>::size() const {
-	return heap.size();
+    return heap.size();
 }
 
 #endif	// MY_PRIORITY_QUEUE_H

@@ -1,5 +1,5 @@
 /*************************************************
- * File: test-harness-myvector.cpp 
+ * File: test-harness-myvector.cpp
  *
  * File containing several test cases that can be
  * used to verify the correctness of the MyVector
@@ -22,14 +22,14 @@ using namespace std;
  * of the implementation, you will want to turn more and more of these
  * flags on.
  */
-#define BasicMyVectorTestEnabled          1 
+#define BasicMyVectorTestEnabled          1
 #define ModerateMyVectorTestEnabled       1
 #define HarderMyVectorTestEnabled         1
-#define MutatingMyVectorTestEnabled       1
+#define MutatingMyVectorTestEnabled        1
+#define ConstMyVectorTestEnabled          1
 
-#define ConstMyVectorTestEnabled          0
-#define BasicCopyTestEnabled              0
-#define ModerateCopyTestEnabled           0
+#define BasicCopyTestEnabled            1
+#define ModerateCopyTestEnabled         1
 
 
 /* Utility function that pauses until the user hits ENTER. */
@@ -140,7 +140,7 @@ void moderateMyVectorTest() try {
 
   /* Make sure that the values of these points are correct. */
   int* fwd = vect.begin();
-  int* bwd = vect.end(); 
+  int* bwd = vect.end();
   while(fwd != bwd){
     --bwd;
     checkCondition(*fwd == *bwd, "vector has correct values.");
@@ -161,7 +161,7 @@ void moderateMyVectorTest() try {
   /* Check basic properties again. */
   checkCondition(vect.size() == 0,      "vector has no elements.");
   checkCondition(vect.empty(),          "vector is empty.");
-  
+
   endTest();
 #else
   testDisabled("moderateMyVectorTest");
@@ -170,7 +170,7 @@ void moderateMyVectorTest() try {
   failTest(e);
 }
 
-/* This test still uses just the basic functionality, but uses larger 
+/* This test still uses just the basic functionality, but uses larger
  * data set and index based access
  */
 void harderMyVectorTest() try {
@@ -195,7 +195,7 @@ void harderMyVectorTest() try {
 
   for (size_t i = 0; i < 2048; ++i)
     vect.push_back(-i);
-  
+
   /* Check that basic properties hold. */
   checkCondition(vect.size() == 4096, "vector has now 4096 elements.");
   checkCondition(!vect.empty(),       "vector is nonempty.");
@@ -212,7 +212,7 @@ void harderMyVectorTest() try {
   checkCondition(vect.size() == 4096, "vector has again 4096 elements.");
   checkCondition(!vect.empty(),       "vector is nonempty.");
 
-  
+
   endTest();
 #else
   testDisabled("HarderMyVectorTest");
@@ -240,7 +240,7 @@ void mutatingMyVectorTest() try {
   checkCondition(!vect.empty(),     "vector is nonempty.");
 
   for (size_t i = 0; i < 16; ++i)
-    vect[i] = vect[i] + 1; 
+    vect[i] = vect[i] + 1;
 
   for (size_t i = 0; i < 16; ++i)
     checkCondition(vect[i] == i + 1, "updated vector has correct values.");
@@ -264,22 +264,22 @@ void constMyVectorTest() try {
 
   MyVector<int> vect;
   for (size_t i = 0; i < 4; ++i)
-    vect.push_back(i); 
-  
+    vect.push_back(i);
+
   /* Check that the code compiles for the non-const version. */
   vect.size();
   vect.empty();
-  vect[3]=10; 
+  vect[3]=10;
 
   const MyVector<int>& const_vect = vect;
-  
+
   /* Check that the code compiles for the const version. */
   const_vect.size();
   const_vect.empty();
-  const_vect[3]; 
-  
+  const_vect[3];
+
   checkCondition(true, "Const code compiles.");
-  
+
   /* Run the basic vect tests using a const vect. */
   checkCondition(const_vect[0]==0, "const_vect has element zero.");
   checkCondition(const_vect[1]==1, "const_vect has element one.");
@@ -303,10 +303,10 @@ void basicCopyTest() try {
 
   MyVector<int> one;
   for (size_t i = 0; i < 10; ++i)
-    one.push_back(2*i); 
+    one.push_back(2*i);
 
   {
-    /* Create a clone of one and confirm that everything copied correctly. 
+    /* Create a clone of one and confirm that everything copied correctly.
      * This uses the copy constructor.
      */
     MyVector<int> clone = one;
@@ -321,11 +321,11 @@ void basicCopyTest() try {
 
   }
   {
-    /* Create a clone of one and confirm that everything copied correctly. 
+    /* Create a clone of one and confirm that everything copied correctly.
      * This uses the assignment operator.
      */
     MyVector<int> clone;
-    clone = one;    
+    clone = one;
 
     /* Basic checks. */
     checkCondition(one.size() == clone.size(),           "clone has the same number of elements as the one.");
@@ -351,10 +351,10 @@ void moderateCopyTest() try {
 
   MyVector<int> one;
   for (size_t i = 0; i < 10; ++i)
-    one.push_back(2*i); 
+    one.push_back(2*i);
 
   {
-    /* Create a clone of one and confirm that everything copied correctly. 
+    /* Create a clone of one and confirm that everything copied correctly.
      * This uses the copy constructor.
      */
     MyVector<int> clone = one;
@@ -373,7 +373,7 @@ void moderateCopyTest() try {
   }
 
   {
-    /* Create a clone of one and confirm that everything copied correctly. 
+    /* Create a clone of one and confirm that everything copied correctly.
      * This uses the assignment operator.
      */
     MyVector<int> clone;
@@ -402,7 +402,7 @@ int main() {
   harderMyVectorTest();
   mutatingMyVectorTest();
   constMyVectorTest();
-  
+
   basicCopyTest();
   moderateCopyTest();
 
@@ -417,6 +417,6 @@ int main() {
 #else
   cout << "Not all tests were run.  Enable the rest of the tests, then run again." << endl << endl;
 #endif
-  
+
   pressEnterToContinue();
 }

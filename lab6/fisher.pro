@@ -23,6 +23,7 @@ QMAKE_CXXFLAGS_RELEASE += -D NDEBUG -O3 -march=native -flto
 
 QMAKE_LFLAGS += -m64
 
-SOURCES = Event.cpp Fish.cpp main.cpp Simulation.cpp
+#SOURCES = Event.cpp Fish.cpp main.cpp Simulation.cpp
+SOURCES = test-harness-myprio.cpp #test-harness-myvector.cpp
 
 HEADERS = $$files(*.h,true)
