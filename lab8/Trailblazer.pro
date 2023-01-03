@@ -12,7 +12,7 @@ CONFIG -= app_bundle
 # Used to turn off warnings for qt headers.
 QMAKE_CXXFLAGS += -isystem $$[QT_INSTALL_HEADERS]
 
-QMAKE_CXXFLAGS += -std=c++11 -m64 -pipe -fstack-clash-protection -fstack-protector-strong
+QMAKE_CXXFLAGS += -std=c++11 -m64 -pipe
 
 # Warnings
 QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wunused -Wold-style-cast -Woverloaded-virtual -Wnull-dereference

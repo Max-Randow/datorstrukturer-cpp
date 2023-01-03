@@ -13,13 +13,42 @@
 
 using namespace std;
 
+vector<Node *> aStarImpl(BasicGraph& graph, Vertex* start, Vertex* end, double (*heuristic)(Vertex* const from, Vertex* const to)) {
+    graph.resetData();
+    return {};
+}
+
 vector<Node *> aStar(BasicGraph& graph, Vertex* start, Vertex* end) {
+    return aStarImpl(graph, start, end, [](Vertex* const from, Vertex* const to) {
+        return from->heuristic(to);
+    });
+}
+
+/*
+vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end) {
+    return aStar(graph, start, end, [](Vertex* const from, Vertex* const to) {
+        return 0;
+    })
+}
+*/
+
+vector<Node*> constructPath(Vertex* const start, Vertex* const end) {
     vector<Vertex*> path;
+    Vertex* vertex = end;
+
+    while(vertex != start){
+        path.push_back(vertex);
+        vertex = vertex->previous;
+    }
+
+    path.push_back(start);
+    reverse(path.begin(), path.end());
     return path;
 }
 
 vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end) {
-    vector<Vertex*> path;
+    graph.resetData();
+
     PriorityQueue<Vertex*> queue;
     double const infinity = numeric_limits<double>::max();
 
@@ -38,14 +67,7 @@ vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end)
         current_vertex->setColor(GREEN);
 
         if(current_vertex == end) {
-            while(current_vertex != start){
-                path.push_back(current_vertex);
-                current_vertex = current_vertex->previous;
-            }
-
-            path.push_back(start);
-            reverse(path.begin(), path.end());
-            break;
+            return constructPath(start, end);
         }
 
         for(Vertex* const neighbor : graph.getNeighbors(current_vertex)){
@@ -66,11 +88,11 @@ vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end)
         }
     }
 
-    return path;
+    return {};
 }
 
 
-bool depthFirstSearchImpl(BasicGraph& graph, Vertex* start, Vertex* end, vector<Vertex*>& path) {
+bool depthFirstSearchImpl(BasicGraph const& graph, Vertex* const start, Vertex* const end) {
     start->visited = true;
     start->setColor(GREEN);
 
@@ -79,8 +101,8 @@ bool depthFirstSearchImpl(BasicGraph& graph, Vertex* start, Vertex* end, vector<
     }
 
     for(Vertex* const neighbor : graph.getNeighbors(start)) {
-        if(!neighbor->visited && depthFirstSearchImpl(graph, neighbor, end, path)) {
-            path.push_back(neighbor);
+        if(!neighbor->visited && depthFirstSearchImpl(graph, neighbor, end)) {
+            neighbor->previous = start;
             return true;
         }
     }
@@ -92,22 +114,14 @@ bool depthFirstSearchImpl(BasicGraph& graph, Vertex* start, Vertex* end, vector<
 vector<Node *> depthFirstSearch(BasicGraph& graph, Vertex* start, Vertex* end) {
     graph.resetData();
 
-    vector<Vertex*> path;
+    depthFirstSearchImpl(graph, start, end);
 
-    depthFirstSearchImpl(graph, start, end, path);
-    path.push_back(start);
-    reverse(path.begin(), path.end());
-
-    return path;
+    return constructPath(start, end);
 }
-
-
-using namespace std;
 
 vector<Node*> breadthFirstSearch(BasicGraph& graph, Vertex* start, Vertex* end) {
     graph.resetData();
 
-    vector<Vertex*> path;
     queue<Vertex*> queue;
     start->visited = true;
     start->setColor(YELLOW);
@@ -119,14 +133,7 @@ vector<Node*> breadthFirstSearch(BasicGraph& graph, Vertex* start, Vertex* end) 
         current_vertex->setColor(GREEN);
 
         if(current_vertex == end){
-            while(current_vertex != start){
-                path.push_back(current_vertex);
-                current_vertex = current_vertex->previous;
-            }
-
-            path.push_back(start);
-            reverse(path.begin(), path.end());
-            break;
+            return constructPath(start, end);
         }
 
         for(Vertex* const neighbor : graph.getNeighbors(current_vertex)){
@@ -141,5 +148,5 @@ vector<Node*> breadthFirstSearch(BasicGraph& graph, Vertex* start, Vertex* end) 
         }
     }
 
-    return path;
+    return {};
 }
