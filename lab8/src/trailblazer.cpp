@@ -9,24 +9,63 @@
 #include "BasicGraph.h"
 #include <queue>
 #include <algorithm>
+#include "pqueue.h"
 
 using namespace std;
 
 vector<Node *> aStar(BasicGraph& graph, Vertex* start, Vertex* end) {
-    // TODO: implement this function; remove these comments
-    //       (The function body code provided below is just a stub that returns
-    //        an empty vector so that the overall project will compile.
-    //        You should remove that code and replace it with your implementation.)
     vector<Vertex*> path;
     return path;
 }
 
 vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end) {
-    // TODO: implement this function; remove these comments
-    //       (The function body code provided below is just a stub that returns
-    //        an empty vector so that the overall project will compile.
-    //        You should remove that code and replace it with your implementation.)
     vector<Vertex*> path;
+    PriorityQueue<Vertex*> queue;
+    double const infinity = numeric_limits<double>::max();
+
+    for(Vertex* const vertex : graph.getVertexSet()) {
+        vertex->cost = infinity;
+        queue.enqueue(vertex, infinity);
+    }
+
+    queue.changePriority(start, 0);
+    start->cost = 0;
+    start->visited = true;
+    start->setColor(YELLOW);
+
+    while(!queue.isEmpty()) {
+        Vertex* current_vertex = queue.dequeue();
+        current_vertex->setColor(GREEN);
+
+        if(current_vertex == end) {
+            while(current_vertex != start){
+                path.push_back(current_vertex);
+                current_vertex = current_vertex->previous;
+            }
+
+            path.push_back(start);
+            reverse(path.begin(), path.end());
+            break;
+        }
+
+        for(Vertex* const neighbor : graph.getNeighbors(current_vertex)){
+            double const new_cost = current_vertex->cost + graph.getEdge(current_vertex, neighbor)->cost;
+
+            if(neighbor->cost > new_cost) {
+                neighbor->cost = new_cost;
+                neighbor->previous = current_vertex;
+
+                if(neighbor->visited) {
+                    queue.changePriority(neighbor, new_cost);
+                } else {
+                    neighbor->visited = true;
+                    neighbor->setColor(YELLOW);
+                    queue.enqueue(neighbor, new_cost);
+                }
+            }
+        }
+    }
+
     return path;
 }
 
@@ -90,15 +129,15 @@ vector<Node*> breadthFirstSearch(BasicGraph& graph, Vertex* start, Vertex* end) 
             break;
         }
 
-        for(Vertex* const neighbour : graph.getNeighbors(current_vertex)){
-            if(neighbour->visited){
+        for(Vertex* const neighbor : graph.getNeighbors(current_vertex)){
+            if(neighbor->visited){
                 continue;
             }
 
-            neighbour->visited = true;
-            neighbour->previous = current_vertex;
-            neighbour->setColor(YELLOW);
-            queue.push(neighbour);
+            neighbor->visited = true;
+            neighbor->previous = current_vertex;
+            neighbor->setColor(YELLOW);
+            queue.push(neighbor);
         }
     }
 
