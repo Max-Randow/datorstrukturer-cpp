@@ -4,14 +4,10 @@ TEMPLATE = app
 CONFIG += no_include_pwd
 
 # Reduce compile times and avoid configuration confusion by excluding Qt libs
-#CONFIG -= qt
+CONFIG -= qt
 
 # Do not create an app bundle when running on OS X
-#CONFIG -= app_bundle
-
-
-
-
+CONFIG -= app_bundle
 
 # Used to turn off warnings for qt headers.
 QMAKE_CXXFLAGS += -isystem $$[QT_INSTALL_HEADERS]
@@ -25,7 +21,7 @@ QMAKE_CXXFLAGS += -Wconversion -Wdouble-promotion
 QMAKE_CXXFLAGS += -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wuseless-cast -Wunsafe-loop-optimizations
 
 # Errors
-QMAKE_CXXFLAGS += -Werror=implicit-fallthrough -Werror=return-type -Werror=narrowing -Werror=uninitialized
+QMAKE_CXXFLAGS += -Wimplicit-fallthrough -Werror=return-type -Werror=narrowing -Wuninitialized
 
 QMAKE_CXXFLAGS_DEBUG += -Og -g -ggdb -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables
 QMAKE_CXXFLAGS_RELEASE += -D NDEBUG -O3 -march=native -flto
@@ -35,10 +31,6 @@ QMAKE_LFLAGS += -m64
 # These flags increase the recursion stack size so that recursive DFS doesn't
 # exhaust all available stack space on large graphs
 QMAKE_CXXFLAGS += -fno-stack-limit -fstack-check
-
-
-
-
 
 INCLUDEPATH += $$PWD/lib/StanfordCPPLib/
 
