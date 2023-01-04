@@ -13,30 +13,11 @@
 
 using namespace std;
 
-vector<Node *> aStarImpl(BasicGraph& graph, Vertex* start, Vertex* end, double (*heuristic)(Vertex* const from, Vertex* const to)) {
-    graph.resetData();
-    return {};
-}
-
-vector<Node *> aStar(BasicGraph& graph, Vertex* start, Vertex* end) {
-    return aStarImpl(graph, start, end, [](Vertex* const from, Vertex* const to) {
-        return from->heuristic(to);
-    });
-}
-
-/*
-vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end) {
-    return aStar(graph, start, end, [](Vertex* const from, Vertex* const to) {
-        return 0;
-    })
-}
-*/
-
 vector<Node*> constructPath(Vertex* const start, Vertex* const end) {
     vector<Vertex*> path;
     Vertex* vertex = end;
 
-    while(vertex != start){
+    while(vertex != start) {
         path.push_back(vertex);
         vertex = vertex->previous;
     }
@@ -46,7 +27,7 @@ vector<Node*> constructPath(Vertex* const start, Vertex* const end) {
     return path;
 }
 
-vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end) {
+vector<Node *> aStarImpl(BasicGraph& graph, Vertex* start, Vertex* end, double (*heuristic)(Vertex* const from, Vertex* const to)) {
     graph.resetData();
 
     PriorityQueue<Vertex*> queue;
@@ -57,7 +38,7 @@ vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end)
         queue.enqueue(vertex, infinity);
     }
 
-    queue.changePriority(start, 0);
+    queue.changePriority(start, heuristic(start, end));
     start->cost = 0;
     start->visited = true;
     start->setColor(YELLOW);
@@ -78,19 +59,29 @@ vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end)
                 neighbor->previous = current_vertex;
 
                 if(neighbor->visited) {
-                    queue.changePriority(neighbor, new_cost);
+                    queue.changePriority(neighbor, new_cost + heuristic(neighbor, end));
                 } else {
                     neighbor->visited = true;
                     neighbor->setColor(YELLOW);
-                    queue.enqueue(neighbor, new_cost);
+                    queue.enqueue(neighbor, new_cost + heuristic(neighbor, end));
                 }
             }
         }
     }
-
     return {};
 }
 
+vector<Node *> aStar(BasicGraph& graph, Vertex* start, Vertex* end) {
+    return aStarImpl(graph, start, end, [](Vertex* const from, Vertex* const to) {
+        return from->heuristic(to);
+    });
+}
+
+vector<Node *> dijkstrasAlgorithm(BasicGraph& graph, Vertex* start, Vertex* end) {
+    return aStarImpl(graph, start, end, [](Vertex* const from, Vertex* const to) {
+        return 0.0;
+    });
+}
 
 bool depthFirstSearchImpl(BasicGraph const& graph, Vertex* const start, Vertex* const end) {
     start->visited = true;
