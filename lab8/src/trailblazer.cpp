@@ -31,20 +31,19 @@ vector<Node *> aStarImpl(BasicGraph& graph, Vertex* start, Vertex* end, double (
     graph.resetData();
 
     PriorityQueue<Vertex*> queue;
-    double const infinity = numeric_limits<double>::max();
 
     for(Vertex* const vertex : graph.getVertexSet()) {
-        vertex->cost = infinity;
-        queue.enqueue(vertex, infinity);
+        vertex->cost = POSITIVE_INFINITY;
     }
 
-    queue.changePriority(start, heuristic(start, end));
     start->cost = 0;
     start->visited = true;
     start->setColor(YELLOW);
+    queue.enqueue(start, heuristic(start, end));
 
     while(!queue.isEmpty()) {
         Vertex* current_vertex = queue.dequeue();
+        current_vertex->visited = true;
         current_vertex->setColor(GREEN);
 
         if(current_vertex == end) {
@@ -52,19 +51,23 @@ vector<Node *> aStarImpl(BasicGraph& graph, Vertex* start, Vertex* end, double (
         }
 
         for(Vertex* const neighbor : graph.getNeighbors(current_vertex)){
+            if(neighbor->visited) {
+                continue;
+            }
+
             double const new_cost = current_vertex->cost + graph.getEdge(current_vertex, neighbor)->cost;
+            double& neighborCost = neighbor->cost;
 
-            if(neighbor->cost > new_cost) {
-                neighbor->cost = new_cost;
-                neighbor->previous = current_vertex;
-
-                if(neighbor->visited) {
+            if(neighborCost > new_cost) {
+                if(neighborCost != POSITIVE_INFINITY) {
                     queue.changePriority(neighbor, new_cost + heuristic(neighbor, end));
                 } else {
-                    neighbor->visited = true;
                     neighbor->setColor(YELLOW);
                     queue.enqueue(neighbor, new_cost + heuristic(neighbor, end));
                 }
+
+                neighborCost = new_cost;
+                neighbor->previous = current_vertex;
             }
         }
     }
