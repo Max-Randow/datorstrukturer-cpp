@@ -1,6 +1,7 @@
 /*
  * Authors: wilmi895 maxra518
- *
+ * Usage:
+ * Implements a dynamic array, vector with templated element type.
  */
 
 #ifndef MY_VECTOR_H
@@ -60,6 +61,9 @@ MyVector<T>::MyVector() {
     numberOfElements = 0;
 }
 
+/*
+ * Copies another vector to this object.
+ */
 template<typename T>
 void MyVector<T>::copyVector(MyVector const& other) {
     capacity = other.capacity;
@@ -95,7 +99,6 @@ MyVector<T>& MyVector<T>::operator=(const MyVector& other) {
     if(this == &other){
         return *this;
     }
-
     copyVector(other);
 
     return *this;
@@ -118,7 +121,7 @@ void MyVector<T>::push_back(const T& e) {
 }
 
 /*
- * Removes element from storage by decreasing the numberOfElements
+ * Removes last element from vector.
  */
 template<typename T>
 void MyVector<T>::pop_back() {
@@ -128,7 +131,7 @@ void MyVector<T>::pop_back() {
 }
 
 /*
- * Returns i:th element of storage
+ * Returns i:th element in vector.
  */
 template<typename T>
 T& MyVector<T>::operator[](unsigned i) {
@@ -136,7 +139,7 @@ T& MyVector<T>::operator[](unsigned i) {
 }
 
 /*
- * Returns i:th element of storage
+ * Returns i:th element in vector.
  */
 template<typename T>
 const T& MyVector<T>::operator[](unsigned i) const {
@@ -144,7 +147,7 @@ const T& MyVector<T>::operator[](unsigned i) const {
 }
 
 /*
- * returns true if numberOfElements is zero. Storage is empty
+ * Checks if vector is empty.
  */
 template<typename T>
 bool MyVector<T>::empty() const {
@@ -152,7 +155,7 @@ bool MyVector<T>::empty() const {
 }
 
 /*
- * Clears storage of all elements and resets capacity to 1
+ * Clears vector of all elements and resets capacity to 1
  */
 template<typename T>
 void MyVector<T>::clear() {
@@ -163,7 +166,7 @@ void MyVector<T>::clear() {
 }
 
 /*
- * Returns size of storage
+ * Returns size of vector.
  */
 template<typename T>
 unsigned MyVector<T>::size() const {
@@ -171,7 +174,7 @@ unsigned MyVector<T>::size() const {
 }
 
 /*
- * Returns a pointer of first element in storage
+ * Returns a pointer to the first element in vector.
  */
 template<typename T>
 T* MyVector<T>::begin() const {
@@ -179,7 +182,7 @@ T* MyVector<T>::begin() const {
 }
 
 /*
- * Returns a pointer of the element after the last in storage
+ * Returns a pointer to the last element in vector.
  */
 template<typename T>
 T* MyVector<T>::end() const {

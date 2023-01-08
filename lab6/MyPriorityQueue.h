@@ -1,8 +1,8 @@
-// This is the second .h file you will edit
-// We have provided a skeleton for you,
-// but you must finish it as described in the spec.
-// Also remove these comments here and add your own, as well as on the members.
-// TODO: remove this comment header
+/*
+ * Authors: wilmi895 maxra518
+ * Usage:
+ * Implements a priority queue with templated type and comparison operator.
+ */
 
 #ifndef MY_PRIORITY_QUEUE_H
 #define MY_PRIORITY_QUEUE_H
@@ -38,20 +38,26 @@ private:
 
 };
 
+/*
+ * Check if a given index in heap is a leaf node in the heap tree.
+ */
 template<typename T, typename C>
 bool MyPriorityQueue<T, C>::isLeaf(unsigned const index) const {
     unsigned const heapSize = size();
     return (index >= heapSize/2) && (index < heapSize);
 }
 
+/*
+ * Shifts a node down with given index to it's correct position in the heap tree.
+ */
 template<typename T, typename C>
 void MyPriorityQueue<T, C>::shiftDown(int index){
     if(isLeaf(index) || index < 0){
         return;
     }
 
-    int const leftChild = 2*index +1;
-    int const rightChild = 2*index +2;
+    int const leftChild = 2 * index + 1;
+    int const rightChild = 2 * index + 2;
     int swapIndex = leftChild;
 
     // pick swapIndex to be the smallest of left and rightchild
@@ -63,8 +69,11 @@ void MyPriorityQueue<T, C>::shiftDown(int index){
         swap(index,swapIndex);
         shiftDown(swapIndex);
     }
-    return;
 }
+
+/*
+ * Swaps two values in the heap tree.
+ */
 template<typename T, typename C>
 void MyPriorityQueue<T, C>::swap(int const i, int const j){
     T const temp = heap[i];
@@ -72,6 +81,9 @@ void MyPriorityQueue<T, C>::swap(int const i, int const j){
     heap[j] = temp;
 }
 
+/*
+ * Shifts a node up with given index to it's correct position in the heap tree.
+ */
 template<typename T, typename C>
 void MyPriorityQueue<T, C>::shiftUp(int const index){
     if(index < 0){
@@ -88,17 +100,26 @@ void MyPriorityQueue<T, C>::shiftUp(int const index){
     }
 }
 
+/*
+ * Pushes a value onto the queue.
+ */
 template<typename T, typename C>
 void MyPriorityQueue<T, C>::push(const T& t) {
     heap.push_back(t);
     shiftUp(size() - 1);
 }
 
+/*
+ * Returns the value at the top of the queue.
+ */
 template<typename T, typename C>
 T MyPriorityQueue<T, C>::top() const {
     return heap[0];
 }
 
+/*
+ * Pops the value at the end of the queue.
+ */
 template<typename T, typename C>
 void MyPriorityQueue<T, C>::pop() {
     heap[0] = heap[heap.size() - 1];
@@ -106,11 +127,17 @@ void MyPriorityQueue<T, C>::pop() {
     shiftDown(0);
 }
 
+/*
+ * Checks if the queue is empty.
+ */
 template<typename T, typename C>
 bool MyPriorityQueue<T, C>::empty() const {
     return heap.empty();
 }
 
+/*
+ * Returns the size of the queue.
+ */
 template<typename T, typename C>
 unsigned MyPriorityQueue<T, C>::size() const {
     return heap.size();
