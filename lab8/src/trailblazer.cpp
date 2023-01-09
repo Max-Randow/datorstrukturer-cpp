@@ -71,6 +71,7 @@ vector<Node *> aStarImpl(BasicGraph& graph, Vertex* start, Vertex* end, double (
             if(new_cost < neighborCost) {
                 if(neighborCost != POSITIVE_INFINITY) {
                     queue.changePriority(neighbor, new_cost + heuristic(neighbor, end));
+
                 } else {
                     neighbor->setColor(YELLOW);
                     queue.enqueue(neighbor, new_cost + heuristic(neighbor, end));

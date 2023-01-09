@@ -1,4 +1,5 @@
-	1:
+
+1:
 eventQueue andvänds i,
 
 Simulation::run:
@@ -25,3 +26,8 @@ Lägger till en fisk i allTheFish.
 (90000, 500)
 
 3:
+Om push_back har O(N) complexitet kommer vector ha en kvadratisk complexitet
+överlag eftersom vid varje pushback kommer en kopiering att ske för att utöka
+storleken i storage. Det ger 1 + 2 + 3 + 4 ... + n kopieringar vilket är n(n+1)/2 dvs O(N^2)
+Medans O(1) kommer ge amorterad complexitet då storage dubblerar storleken vilket
+resulterar i färre kopieringar överlag.

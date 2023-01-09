@@ -47,7 +47,6 @@ private:
     unsigned capacity;
     unsigned numberOfElements;
     T* storage = nullptr;
-    void reserve(unsigned size);
     void copyVector(MyVector const& other);
 };
 
